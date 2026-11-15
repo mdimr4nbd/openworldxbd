@@ -1,1350 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OPENWORLDXBD — Official Bio & Developer Hub</title>
-    
-    <!-- Google Fonts: Plus Jakarta Sans, Rubik Wet Paint & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS & JSZip for One-Click Multi-File ZIP Export -->
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <style id="mainStylesheet">
-        /* ==========================================================================
-           1. THEME VARIABLES (DARK & LIGHT - UI UX PRO MAX BLUE & AMBER MULTICOLOR)
-           ========================================================================== */
-        :root {
-            --bg-primary: #070b14;
-            --bg-gradient: radial-gradient(circle at 38% 36%, rgba(37, 99, 235, 0.24) 0%, transparent 48%),
-                           radial-gradient(circle at 82% 45%, rgba(234, 88, 12, 0.22) 0%, transparent 46%),
-                           radial-gradient(circle at 22% 85%, rgba(59, 130, 246, 0.16) 0%, transparent 45%),
-                           linear-gradient(180deg, #070b14 0%, #090e1a 55%, #060911 100%);
-            --card-bg: rgba(17, 24, 39, 0.72);
-            --card-border: rgba(148, 163, 184, 0.16);
-            --card-hover-border: rgba(249, 115, 22, 0.45);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --accent-blue: #3b82f6;
-            --accent-indigo: #6366f1;
-            --accent-pink: #f97316;
-            --accent-emerald: #10b981;
-            --multi-gradient: linear-gradient(90deg, #3b82f6 0%, #60a5fa 45%, #fb923c 75%, #f97316 100%);
-            --pill-bg: rgba(30, 41, 59, 0.75);
-            --pill-active-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(249, 115, 22, 0.22));
-            --code-bg: #080d1a;
-            --shadow-glow: 0 12px 32px -8px rgba(15, 23, 42, 0.6);
-        }
-
-        html.light-theme {
-            --bg-primary: #f4f6fb;
-            --bg-gradient: radial-gradient(circle at 35% 30%, rgba(59, 130, 246, 0.16) 0%, transparent 48%),
-                           radial-gradient(circle at 82% 45%, rgba(249, 115, 22, 0.15) 0%, transparent 46%),
-                           linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
-            --card-bg: rgba(255, 255, 255, 0.88);
-            --card-border: rgba(148, 163, 184, 0.25);
-            --card-hover-border: rgba(59, 130, 246, 0.45);
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --accent-blue: #2563eb;
-            --accent-indigo: #4f46e5;
-            --accent-pink: #ea580c;
-            --accent-emerald: #059669;
-            --multi-gradient: linear-gradient(90deg, #2563eb 0%, #3b82f6 45%, #f97316 80%, #ea580c 100%);
-            --pill-bg: rgba(241, 245, 249, 0.95);
-            --pill-active-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(249, 115, 22, 0.14));
-            --code-bg: #ffffff;
-            --shadow-glow: 0 12px 30px -8px rgba(15, 23, 42, 0.08);
-        }
-
-        /* ==========================================================================
-           2. BASE & ZERO-FLICKER LAYOUT
-           ========================================================================== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            min-height: 100vh;
-            width: 100%;
-            overflow-x: hidden;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-primary);
-            background-image: var(--bg-gradient);
-            color: var(--text-primary);
-        }
-
-        #starfieldCanvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .app-shell {
-            position: relative;
-            z-index: 1;
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 64px 16px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* ==========================================================================
-           3. KEYFRAME ANIMATIONS (ORBIT, WAVE FLOAT, MOTION BLUR, CODE SCROLL)
-           ========================================================================== */
-        @keyframes orbitSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes orbitSpinReverse {
-            from { transform: rotate(360deg); }
-            to { transform: rotate(0deg); }
-        }
-
-        @keyframes waveFloatBox {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-4px); }
-        }
-
-        @keyframes iconHoverBob {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-2.5px) scale(1.06); }
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.45; transform: scale(0.85); }
-        }
-
-        @keyframes liveCircleFlyOut {
-            0% {
-                transform: scale(1);
-                opacity: 0.85;
-            }
-            100% {
-                transform: scale(2.3);
-                opacity: 0;
-            }
-        }
-
-        @keyframes smoothMotionEntrance {
-            0% {
-                opacity: 0;
-                filter: blur(8px);
-                transform: translateY(14px) scale(0.98);
-            }
-            100% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: translateY(0px) scale(1);
-            }
-        }
-
-        @keyframes motionBlurPanel {
-            0% {
-                opacity: 0;
-                filter: blur(7px);
-                transform: translateY(8px);
-            }
-            100% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: translateY(0px);
-            }
-        }
-
-        @keyframes codeMotionScroll {
-            0% { transform: translateY(0%); }
-            100% { transform: translateY(-50%); }
-        }
-
-        /* ==========================================================================
-           4. FIXED ALWAYS-VISIBLE TOP NAVIGATION BAR (FLUSH TOP)
-           ========================================================================== */
-        .top-navbar {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px;
-            z-index: 50;
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 16px;
-            border-radius: 0;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-top: none;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .brand-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .top-logo-orbit {
-            position: relative;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .top-logo-orbit::before {
-            content: '';
-            position: absolute;
-            inset: -2.5px;
-            border-radius: 50%;
-            border: 1.5px dashed #fb923c;
-            animation: orbitSpin 10s linear infinite;
-            pointer-events: none;
-        }
-
-        .brand-logo-circle {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: var(--multi-gradient);
-            padding: 1.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .brand-logo-circle img,
-        .brand-logo-circle svg {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            background: #e2e8f0;
-        }
-
-        .brand-title-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .brand-name {
-            font-family: 'Rubik Wet Paint', cursive, sans-serif;
-            font-size: 13.5px;
-            font-weight: 400;
-            letter-spacing: 0.04em;
-            background: var(--multi-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-name .bd-small,
-        .hero-name .bd-small {
-            font-size: 0.88em;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .theme-toggle-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid var(--card-border);
-            background: var(--pill-bg);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .theme-toggle-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* ==========================================================================
-           5. HERO PROFILE CARD (86PX AVATAR + ROTATING RING LINE + TYPING)
-           ========================================================================== */
-        .hero-card {
-            background: var(--card-bg);
-            border: 1px solid transparent;
-            border-radius: 26px;
-            padding: 26px 20px 22px;
-            text-align: center;
-            box-shadow: var(--shadow-glow);
-            position: relative;
-            overflow: hidden;
-            animation: smoothMotionEntrance 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
-        }
-
-        /* মেইন বড় বক্সের চারপাশ দিয়ে ঘূর্ণায়মান রিং লাইন */
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 170%;
-            height: 220%;
-            margin-top: -110%;
-            margin-left: -85%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 0%,
-                transparent 18%,
-                #3b82f6 32%,
-                #60a5fa 44%,
-                transparent 54%,
-                transparent 68%,
-                #fb923c 82%,
-                #f97316 94%,
-                transparent 100%
-            );
-            animation: orbitSpin 5.5s linear infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .hero-card::after {
-            content: '';
-            position: absolute;
-            inset: 1.5px;
-            border-radius: 24.5px;
-            background: var(--bg-primary);
-            background-image: var(--bg-gradient);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .hero-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .avatar-wrapper {
-            position: relative;
-            width: 86px;
-            height: 86px;
-            margin: 0 auto 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .avatar-dotted-ring {
-            position: absolute;
-            inset: -7px;
-            border-radius: 50%;
-            padding: 2.5px;
-            background: conic-gradient(
-                from 0deg,
-                #3b82f6 0%,
-                #60a5fa 25%,
-                transparent 42%,
-                transparent 55%,
-                #fb923c 75%,
-                #f97316 95%,
-                #3b82f6 100%
-            );
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask-composite: exclude;
-            animation: orbitSpin 3.2s linear infinite;
-            pointer-events: none;
-        }
-
-        .avatar-dotted-ring-inner {
-            position: absolute;
-            inset: -3.5px;
-            border-radius: 50%;
-            border: 1.5px dashed rgba(96, 165, 250, 0.65);
-            animation: orbitSpinReverse 12s linear infinite;
-            pointer-events: none;
-        }
-
-        .avatar-circle {
-            width: 86px;
-            height: 86px;
-            border-radius: 50%;
-            overflow: hidden;
-            padding: 2.5px;
-            background: var(--multi-gradient);
-            box-shadow: 0 8px 26px rgba(59, 130, 246, 0.28);
-            position: relative;
-            z-index: 1;
-        }
-
-        .avatar-circle img,
-        .avatar-circle svg {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            background: #e2e8f0;
-        }
-
-        .hero-name {
-            font-family: 'Rubik Wet Paint', cursive, sans-serif;
-            font-size: 25px;
-            font-weight: 400;
-            letter-spacing: 0.04em;
-            line-height: 1.25;
-            background: var(--multi-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-title-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 4px;
-        }
-
-        .hero-verified-badge {
-            width: 19px;
-            height: 19px;
-            color: #38bdf8;
-            flex-shrink: 0;
-        }
-
-        .hero-owxbd-tag {
-            display: inline-block;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11.5px;
-            font-weight: 700;
-            letter-spacing: 0.35em;
-            padding-left: 0.35em;
-            margin-bottom: 6px;
-            color: var(--accent-blue);
-            opacity: 0.9;
-        }
-
-        .hero-subtitle {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            min-height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ==========================================================================
-           6. LIVELY MESSAGING TABS (MESSENGER / WHATSAPP / TELEGRAM)
-           ========================================================================== */
-        .tabs-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 0 12px;
-        }
-
-        .tab-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 9px 10px;
-            border-radius: 14px;
-            background: var(--card-bg);
-            border: 1px solid transparent;
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-glow);
-            animation: waveFloatBox 3.4s ease-in-out infinite;
-        }
-
-        /* Messenger, WhatsApp ও Telegram ছোট ট্যাব বক্সের বর্ডারের চারপাশ দিয়ে ঘূর্ণায়মান স্পষ্ট রিং লাইন */
-        .tab-box::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 320px;
-            height: 320px;
-            margin-top: -160px;
-            margin-left: -160px;
-            animation: orbitSpin 3.2s linear infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .tab-box:nth-child(1)::before {
-            background: conic-gradient(from 0deg, transparent 0%, transparent 18%, #0084FF 38%, #60a5fa 50%, transparent 65%, transparent 100%);
-        }
-
-        .tab-box:nth-child(2)::before {
-            background: conic-gradient(from 0deg, transparent 0%, transparent 18%, #25D366 38%, #4ade80 50%, transparent 65%, transparent 100%);
-            animation-delay: -1.1s;
-        }
-
-        .tab-box:nth-child(3)::before {
-            background: conic-gradient(from 0deg, transparent 0%, transparent 18%, #26A5E4 38%, #38bdf8 50%, transparent 65%, transparent 100%);
-            animation-delay: -2.2s;
-        }
-
-        .tab-box::after {
-            content: '';
-            position: absolute;
-            inset: 0.75px;
-            border-radius: 13.25px;
-            background: #131c31;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        html.light-theme .tab-box::after {
-            background: #ffffff;
-        }
-
-        .tab-box.active::after {
-            background: linear-gradient(135deg, #1b2847, #272235);
-        }
-
-        html.light-theme .tab-box.active::after {
-            background: linear-gradient(135deg, #eff6ff, #fff7ed);
-        }
-
-        .tab-box > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .tab-box:nth-child(1) { animation-delay: 0s; }
-        .tab-box:nth-child(2) { animation-delay: 0.45s; }
-        .tab-box:nth-child(3) { animation-delay: 0.9s; }
-
-        .tab-box.active {
-            color: var(--text-primary);
-            box-shadow: 0 6px 22px -4px rgba(59, 130, 246, 0.28);
-        }
-
-        .tab-box-icon {
-            width: 15px;
-            height: 15px;
-            flex-shrink: 0;
-            animation: iconHoverBob 2.6s ease-in-out infinite;
-        }
-
-        .tab-panel-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 16px;
-            box-shadow: var(--shadow-glow);
-            position: relative;
-            animation: motionBlurPanel 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .panel-platform {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .panel-icon-badge {
-            width: 36px;
-            height: 36px;
-            border-radius: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            animation: iconHoverBob 2.8s ease-in-out infinite;
-        }
-
-        .fast-reply-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 9px;
-            border-radius: 999px;
-            background: rgba(16, 185, 129, 0.14);
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            color: #10b981;
-            font-size: 10.5px;
-            font-weight: 700;
-        }
-
-        .fast-reply-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #10b981;
-            animation: pulseGlow 1.8s infinite;
-        }
-
-        .panel-cta-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 11px 16px;
-            border-radius: 13px;
-            border: none;
-            font-size: 13px;
-            font-weight: 700;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-            cursor: pointer;
-            box-shadow: 0 6px 18px -4px rgba(56, 189, 248, 0.4);
-        }
-
-        .panel-cta-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* ==========================================================================
-           7. DIRECT CONNECT LINK CARDS (WAVE FLOAT ANIMATION)
-           ========================================================================== */
-        .section-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.09em;
-            color: var(--text-muted);
-            padding-left: 4px;
-            margin-bottom: -6px;
-        }
-
-        .links-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .link-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 14px;
-            border-radius: 18px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            text-decoration: none;
-            color: var(--text-primary);
-            box-shadow: var(--shadow-glow);
-            animation: waveFloatBox 3.8s ease-in-out infinite;
-        }
-
-        .link-card:nth-child(1) { animation-delay: 0.2s; }
-        .link-card:nth-child(2) { animation-delay: 0.7s; }
-        .link-card:nth-child(3) { animation-delay: 1.2s; }
-
-        .link-card:hover {
-            border-color: var(--card-hover-border);
-        }
-
-        .link-card-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .link-icon-box {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            animation: iconHoverBob 2.8s ease-in-out infinite;
-        }
-
-        .link-arrow-circle {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--pill-bg);
-            border: 1px solid var(--card-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-        }
-
-        /* ==========================================================================
-           8. LIVE ANIMATED CODE SHOWCASE WINDOW
-           ========================================================================== */
-        .code-window-card {
-            background: var(--code-bg);
-            border: 1px solid rgba(59, 130, 246, 0.32);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 14px 34px rgba(37, 99, 235, 0.24);
-            animation: waveFloatBox 4.4s ease-in-out infinite;
-        }
-
-        .code-window-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 14px;
-            background: rgba(15, 23, 42, 0.95);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-        }
-
-        .window-dots {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .win-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .code-filename {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
-        .live-status-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: none;
-            padding: 4px;
-            position: relative;
-        }
-
-        .live-status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #10b981;
-            box-shadow: 0 0 6px rgba(16, 185, 129, 0.85);
-            position: relative;
-            display: block;
-        }
-
-        .live-status-dot::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            border: 1px solid #10b981;
-            background: rgba(16, 185, 129, 0.35);
-            animation: liveCircleFlyOut 1.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-            pointer-events: none;
-        }
-
-        .code-viewport {
-            height: 148px;
-            overflow: hidden;
-            position: relative;
-            padding: 10px 14px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11.5px;
-            line-height: 1.65;
-            color: #e2e8f0;
-        }
-
-        .code-viewport::before,
-        .code-viewport::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 22px;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .code-viewport::before {
-            top: 0;
-            background: linear-gradient(to bottom, #080d1a, transparent);
-        }
-
-        .code-viewport::after {
-            bottom: 0;
-            background: linear-gradient(to top, #080d1a, transparent);
-        }
-
-        html.light-theme .code-window-card {
-            background: #ffffff;
-            border: 1px solid rgba(148, 163, 184, 0.28);
-            box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
-        }
-
-        html.light-theme .code-window-header {
-            background: #f8fafc;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.22);
-        }
-
-        html.light-theme .code-filename {
-            color: #475569;
-        }
-
-        html.light-theme .code-viewport {
-            color: #1e293b;
-        }
-
-        html.light-theme .code-viewport::before {
-            background: linear-gradient(to bottom, #ffffff, transparent);
-        }
-
-        html.light-theme .code-viewport::after {
-            background: linear-gradient(to top, #ffffff, transparent);
-        }
-
-        html.light-theme .line-num {
-            color: #94a3b8;
-        }
-
-        html.light-theme .tok-kw { color: #7c3aed; }
-        html.light-theme .tok-var { color: #0284c7; }
-        html.light-theme .tok-prop { color: #2563eb; }
-        html.light-theme .tok-str { color: #16a34a; }
-        html.light-theme .tok-bool { color: #ea580c; }
-
-        .code-scroll-track {
-            display: flex;
-            flex-direction: column;
-            animation: codeMotionScroll 14s linear infinite;
-            will-change: transform;
-        }
-
-        .code-line {
-            display: flex;
-            gap: 12px;
-            white-space: pre;
-        }
-
-        .line-num {
-            color: #475569;
-            user-select: none;
-            min-width: 18px;
-            text-align: right;
-        }
-
-        .tok-kw { color: #c084fc; }
-        .tok-var { color: #38bdf8; }
-        .tok-prop { color: #93c5fd; }
-        .tok-str { color: #4ade80; }
-        .tok-bool { color: #fb923c; }
-
-        /* ==========================================================================
-           9. NON-FIXED BOTTOM COPYRIGHT FOOTER
-           ========================================================================== */
-        .footer-note {
-            width: 100%;
-            margin-top: 4px;
-            text-align: center;
-            font-family: 'Rubik Wet Paint', cursive, sans-serif;
-            font-size: 11px;
-            letter-spacing: 0.04em;
-            color: var(--text-muted);
-            padding: 7px 16px 8px;
-            border-top: 1px solid var(--card-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OPENWORLDXBD — Official Bio & Developer Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+:root{--bg-primary:#070b14;--bg-gradient:radial-gradient(circle at 38% 36%,rgba(37,99,235,.24) 0%,transparent 48%),radial-gradient(circle at 82% 45%,rgba(234,88,12,.22) 0%,transparent 46%),radial-gradient(circle at 22% 85%,rgba(59,130,246,.16) 0%,transparent 45%),linear-gradient(180deg,#070b14 0%,#090e1a 55%,#060911 100%);--card-bg:rgba(17,24,39,.72);--card-border:rgba(148,163,184,.16);--card-hover-border:rgba(249,115,22,.45);--text-primary:#f8fafc;--text-secondary:#94a3b8;--text-muted:#64748b;--accent-blue:#3b82f6;--multi-gradient:linear-gradient(90deg,#3b82f6 0%,#60a5fa 45%,#fb923c 75%,#f97316 100%);--pill-bg:rgba(30,41,59,.75);--code-bg:#080d1a;--shadow-glow:0 12px 32px -8px rgba(15,23,42,.6);--avatar-bg:radial-gradient(circle at 50% 38%,rgba(59,130,246,.6) 0%,rgba(37,99,235,.25) 42%,#0b1426 78%);color-scheme:dark;box-sizing:border-box}
+:root[data-theme="light"],html.light-theme{--bg-primary:#f4f6fb;--bg-gradient:radial-gradient(circle at 35% 30%,rgba(59,130,246,.16) 0%,transparent 48%),radial-gradient(circle at 82% 45%,rgba(249,115,22,.15) 0%,transparent 46%),linear-gradient(180deg,#eef2ff 0%,#f8fafc 100%);--card-bg:rgba(255,255,255,.88);--card-border:rgba(148,163,184,.25);--card-hover-border:rgba(59,130,246,.45);--text-primary:#0f172a;--text-secondary:#475569;--text-muted:#64748b;--accent-blue:#2563eb;--multi-gradient:linear-gradient(90deg,#2563eb 0%,#3b82f6 45%,#f97316 80%,#ea580c 100%);--pill-bg:rgba(241,245,249,.95);--code-bg:#fff;--shadow-glow:0 12px 30px -8px rgba(15,23,42,.08);--avatar-bg:radial-gradient(circle at 50% 38%,rgba(59,130,246,.45) 0%,rgba(96,165,250,.22) 45%,#e8efff 80%);color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100vh;width:100%;overflow-x:hidden;font-family:'Plus Jakarta Sans',sans-serif;background-color:var(--bg-primary);background-image:var(--bg-gradient);color:var(--text-primary)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+#starfieldCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.app-shell{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:calc(64px + env(safe-area-inset-top,0px)) 16px calc(8px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px}
+@keyframes orbitSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes orbitSpinReverse{from{transform:rotate(360deg)}to{transform:rotate(0)}}
+@keyframes waveFloatBox{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes iconHoverBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2.5px) scale(1.06)}}
+@keyframes pulseGlow{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.85)}}
+@keyframes liveCircleFlyOut{0%{transform:scale(1);opacity:.85}100%{transform:scale(2.3);opacity:0}}
+@keyframes smoothMotionEntrance{0%{opacity:0;filter:blur(8px);transform:translateY(14px) scale(.98)}100%{opacity:1;filter:blur(0);transform:none}}
+@keyframes motionBlurPanel{0%{opacity:0;filter:blur(7px);transform:translateY(8px)}100%{opacity:1;filter:blur(0);transform:none}}
+@keyframes codeMotionScroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+@keyframes charSmoothAppear{0%{opacity:0;filter:blur(3px);transform:translateY(3px)}100%{opacity:1;filter:blur(0);transform:none}}
+@keyframes cursorSmoothBlink{0%,100%{opacity:1}50%{opacity:.15}}
+.top-navbar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:50;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--card-bg);border:1px solid var(--card-border);border-top:none;box-shadow:var(--shadow-glow)}
+.brand-left{display:flex;align-items:center;gap:10px}
+.top-logo-orbit{position:relative;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.top-logo-orbit::before{content:'';position:absolute;inset:-2.5px;border-radius:50%;border:1.5px dashed #fb923c;animation:orbitSpin 10s linear infinite;pointer-events:none}
+.brand-logo-circle{width:22px;height:22px;border-radius:50%;overflow:hidden;background:var(--multi-gradient);padding:1.5px;display:flex;align-items:center;justify-content:center}
+.brand-logo-circle img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:var(--avatar-bg)}
+.brand-title-group{display:flex;align-items:center;gap:5px}
+.brand-name{font-family:'Rubik Wet Paint',cursive,sans-serif;font-size:19px;font-weight:400;letter-spacing:.04em;background:var(--multi-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.bd-small{font-size:1em}
+.big-o{font-size:1.06em;line-height:1}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.theme-toggle-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--card-border);background:var(--pill-bg);color:var(--text-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.theme-toggle-btn:active{transform:scale(.92)}
+.hidden{display:none}
+.hero-card{background:var(--card-bg);border:1px solid transparent;border-radius:26px;padding:26px 20px 22px;text-align:center;box-shadow:var(--shadow-glow);position:relative;overflow:hidden;animation:smoothMotionEntrance .65s cubic-bezier(.22,1,.36,1) both}
+.hero-card::before{content:'';position:absolute;top:50%;left:50%;width:170%;height:220%;margin-top:-110%;margin-left:-85%;background:conic-gradient(from 0deg,transparent 0%,transparent 18%,#3b82f6 32%,#60a5fa 44%,transparent 54%,transparent 68%,#fb923c 82%,#f97316 94%,transparent 100%);animation:orbitSpin 5.5s linear infinite;pointer-events:none;z-index:0}
+.hero-card::after{content:'';position:absolute;inset:1.5px;border-radius:24.5px;background:var(--bg-primary);background-image:var(--bg-gradient);z-index:0;pointer-events:none}
+.hero-card>*{position:relative;z-index:1}
+.avatar-wrapper{position:relative;width:86px;height:86px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
+.avatar-dotted-ring{position:absolute;inset:-7px;border-radius:50%;padding:2.5px;background:conic-gradient(from 0deg,#3b82f6 0%,#60a5fa 25%,transparent 42%,transparent 55%,#fb923c 75%,#f97316 95%,#3b82f6 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;animation:orbitSpin 3.2s linear infinite;pointer-events:none}
+.avatar-dotted-ring-inner{position:absolute;inset:-3.5px;border-radius:50%;border:1.5px dashed rgba(96,165,250,.65);animation:orbitSpinReverse 12s linear infinite;pointer-events:none}
+.avatar-circle{width:86px;height:86px;border-radius:50%;overflow:hidden;padding:2.5px;background:var(--multi-gradient);box-shadow:0 8px 26px rgba(59,130,246,.28);position:relative;z-index:1}
+.avatar-circle img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:var(--avatar-bg)}
+.hero-name{font-family:'Rubik Wet Paint',cursive,sans-serif;font-size:25px;font-weight:400;letter-spacing:.04em;line-height:1.25;background:var(--multi-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-title-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:4px}
+.hero-verified-badge{width:25px;height:25px;color:#38bdf8;flex-shrink:0}
+.hero-owxbd-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:.35em;padding-left:.35em;margin-bottom:6px;color:var(--accent-blue);opacity:.9}
+.hero-subtitle{font-size:14px;font-weight:600;color:var(--text-secondary);min-height:24px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.smooth-typing-wrapper{display:inline-flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.typed-char{display:inline-block;white-space:pre;color:var(--text-secondary);animation:charSmoothAppear .32s cubic-bezier(.22,1,.36,1) forwards;transition:opacity .22s ease,transform .22s ease}
+.typing-cursor{display:inline-block;width:1.5px;height:13px;margin-left:5px;border-radius:2px;background:var(--multi-gradient);animation:cursorSmoothBlink .95s ease-in-out infinite;flex-shrink:0}
+.tabs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 12px}
+.tab-box{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border-radius:14px;background:var(--card-bg);border:1px solid transparent;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--shadow-glow);animation:waveFloatBox 3.4s ease-in-out infinite}
+.tab-box::before{content:'';position:absolute;top:50%;left:50%;width:320px;height:320px;margin-top:-160px;margin-left:-160px;animation:orbitSpin 3.2s linear infinite;pointer-events:none;z-index:0}
+.tab-box:nth-child(1)::before{background:conic-gradient(from 0deg,transparent 0%,transparent 18%,#0084FF 38%,#60a5fa 50%,transparent 65%,transparent 100%)}
+.tab-box:nth-child(2)::before{background:conic-gradient(from 0deg,transparent 0%,transparent 18%,#25D366 38%,#4ade80 50%,transparent 65%,transparent 100%);animation-delay:-1.1s}
+.tab-box:nth-child(3)::before{background:conic-gradient(from 0deg,transparent 0%,transparent 18%,#26A5E4 38%,#38bdf8 50%,transparent 65%,transparent 100%);animation-delay:-2.2s}
+.tab-box::after{content:'';position:absolute;inset:.75px;border-radius:13.25px;background:#131c31;z-index:0;pointer-events:none}
+html.light-theme .tab-box::after{background:#fff}
+.tab-box.active::after{background:linear-gradient(135deg,#1b2847,#272235)}
+html.light-theme .tab-box.active::after{background:linear-gradient(135deg,#eff6ff,#fff7ed)}
+.tab-box>*{position:relative;z-index:1}
+.tab-box:nth-child(1){animation-delay:0s}.tab-box:nth-child(2){animation-delay:.45s}.tab-box:nth-child(3){animation-delay:.9s}
+.tab-box.active{color:var(--text-primary);box-shadow:0 6px 22px -4px rgba(59,130,246,.28)}
+.tab-box-icon{width:15px;height:15px;flex-shrink:0;animation:iconHoverBob 2.6s ease-in-out infinite}
+.tab-panel-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:16px;box-shadow:var(--shadow-glow);position:relative;margin-top:12px;animation:motionBlurPanel .38s cubic-bezier(.22,1,.36,1) both}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.panel-platform{display:flex;align-items:center;gap:10px}
+.panel-icon-badge{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;animation:iconHoverBob 2.8s ease-in-out infinite}
+.fast-reply-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.35);color:#10b981;font-size:10.5px;font-weight:700}
+.fast-reply-dot{width:6px;height:6px;border-radius:50%;background:#10b981;animation:pulseGlow 1.8s infinite}
+.panel-cta-btn{width:100%;margin-top:12px;padding:11px 16px;border-radius:13px;border:none;font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;cursor:pointer;box-shadow:0 6px 18px -4px rgba(56,189,248,.4)}
+.panel-cta-btn:active{transform:scale(.98)}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text-muted);padding-left:4px;margin-bottom:-6px}
+.links-stack{display:flex;flex-direction:column;gap:10px}
+.link-card{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:18px;background:var(--card-bg);border:1px solid var(--card-border);text-decoration:none;color:var(--text-primary);box-shadow:var(--shadow-glow);animation:waveFloatBox 3.8s ease-in-out infinite}
+.link-card:nth-child(1){animation-delay:.2s}.link-card:nth-child(2){animation-delay:.7s}.link-card:nth-child(3){animation-delay:1.2s}
+.link-card:hover{border-color:var(--card-hover-border)}
+.link-card-left{display:flex;align-items:center;gap:12px}
+.link-icon-box{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:iconHoverBob 2.8s ease-in-out infinite}
+.link-arrow-circle{width:30px;height:30px;border-radius:50%;background:var(--pill-bg);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;color:var(--text-secondary)}
+.code-window-card{background:var(--code-bg);border:1px solid rgba(59,130,246,.32);border-radius:20px;overflow:hidden;box-shadow:0 14px 34px rgba(37,99,235,.24);animation:waveFloatBox 4.4s ease-in-out infinite}
+.code-window-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(15,23,42,.95);border-bottom:1px solid rgba(148,163,184,.14)}
+.window-dots{display:flex;align-items:center;gap:6px}
+.win-dot{width:10px;height:10px;border-radius:50%}
+.live-status-pill{display:inline-flex;align-items:center;justify-content:center;padding:4px;position:relative}
+.live-status-dot{width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px rgba(16,185,129,.85);position:relative;display:block}
+.live-status-dot::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid #10b981;background:rgba(16,185,129,.35);animation:liveCircleFlyOut 1.6s cubic-bezier(.16,1,.3,1) infinite;pointer-events:none}
+.code-viewport{height:148px;overflow:hidden;position:relative;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.65;color:#e2e8f0}
+.code-viewport::before,.code-viewport::after{content:'';position:absolute;left:0;right:0;height:22px;z-index:2;pointer-events:none}
+.code-viewport::before{top:0;background:linear-gradient(to bottom,#080d1a,transparent)}
+.code-viewport::after{bottom:0;background:linear-gradient(to top,#080d1a,transparent)}
+html.light-theme .code-window-card{background:#fff;border:1px solid rgba(148,163,184,.28);box-shadow:0 12px 28px -6px rgba(15,23,42,.08)}
+html.light-theme .code-window-header{background:#f8fafc;border-bottom:1px solid rgba(148,163,184,.22)}
+html.light-theme .code-viewport{color:#1e293b}
+html.light-theme .code-viewport::before{background:linear-gradient(to bottom,#fff,transparent)}
+html.light-theme .code-viewport::after{background:linear-gradient(to top,#fff,transparent)}
+html.light-theme .line-num{color:#94a3b8}
+html.light-theme .tok-kw{color:#7c3aed}html.light-theme .tok-var{color:#0284c7}html.light-theme .tok-prop{color:#2563eb}html.light-theme .tok-str{color:#16a34a}html.light-theme .tok-bool{color:#ea580c}
+.code-scroll-track{display:flex;flex-direction:column;animation:codeMotionScroll 14s linear infinite;will-change:transform}
+.code-line{display:flex;gap:12px;white-space:pre}
+.line-num{color:#475569;user-select:none;min-width:18px;text-align:right}
+.tok-kw{color:#c084fc}.tok-var{color:#38bdf8}.tok-prop{color:#93c5fd}.tok-str{color:#4ade80}.tok-bool{color:#fb923c}
+.footer-note{width:100%;margin-top:4px;text-align:center;font-family:'Rubik Wet Paint',cursive,sans-serif;font-size:11px;letter-spacing:.04em;color:var(--text-muted);padding:7px 16px 8px;border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:center}
+</style>
 </head>
 <body>
+<canvas id="starfieldCanvas"></canvas>
+<main class="app-shell">
+<header class="top-navbar">
+  <div class="brand-left">
+    <div class="top-logo-orbit"><div class="brand-logo-circle"><img src="data:image/webp;base64,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" alt="OPENWORLDXBD Logo" onerror="renderPortraitFallback(this)"></div></div>
+    <div class="brand-title-group"><span class="brand-name"><span class="big-o">O</span>PENW<span class="big-o">O</span>RLDX<span class="bd-small">BD</span></span></div>
+  </div>
+  <div class="nav-actions">
+    <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Switch Theme" title="Toggle Dark/Light Theme">
+      <svg id="sunIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="moonIcon" class="hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
 
-    <!-- Falling Stars Particle Background -->
-    <canvas id="starfieldCanvas"></canvas>
+<section class="hero-card">
+  <div class="avatar-wrapper">
+    <div class="avatar-dotted-ring"></div><div class="avatar-dotted-ring-inner"></div>
+    <div class="avatar-circle"><img src="data:image/webp;base64,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" alt="OPENWORLDXBD Portrait" onerror="renderPortraitFallback(this)"></div>
+  </div>
+  <div class="hero-title-row">
+    <h1 class="hero-name"><span class="big-o">O</span> W X B D</h1>
+    <svg class="hero-verified-badge" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified"><path d="M12 2L14.8 4.2L18.4 3.9L19.6 7.3L22.6 9.3L21.5 12.8L22.6 16.3L19.6 18.3L18.4 21.7L14.8 21.4L12 23.6L9.2 21.4L5.6 21.7L4.4 18.3L1.4 16.3L2.5 12.8L1.4 9.3L4.4 7.3L5.6 3.9L9.2 4.2L12 2ZM10.4 16.2L17.1 9.5L15.7 8.1L10.4 13.4L8.3 11.3L6.9 12.7L10.4 16.2Z"/></svg>
+  </div>
+  
+  <p class="hero-subtitle"><span class="smooth-typing-wrapper"><span id="typingText"></span><span class="typing-cursor" aria-hidden="true"></span></span></p>
+</section>
 
-    <main class="app-shell">
-        <!-- Sticky Top Navigation Bar -->
-        <header class="top-navbar">
-            <div class="brand-left">
-                <div class="top-logo-orbit">
-                    <div class="brand-logo-circle">
-                        <img src="20175_2.png" alt="OPENWORLDXBD Logo" onerror="renderPortraitFallback(this)">
-                    </div>
-                </div>
-                <div class="brand-title-group">
-                    <span class="brand-name">OPENWORLDX<span class="bd-small">BD</span></span>
-                </div>
-            </div>
+<section aria-label="Direct Messaging Platforms">
+  <div class="tabs-grid" role="tablist">
+    <button class="tab-box active" role="tab" aria-selected="true" onclick="switchPlatform('messenger', this)">
+      <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#0084FF"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/></svg><span>Messenger</span>
+    </button>
+    <button class="tab-box" role="tab" aria-selected="false" onclick="switchPlatform('whatsapp', this)">
+      <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#25D366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.96 1.38-.51.08-1.15.11-1.85-.11-.43-.14-.98-.32-1.68-.62-2.95-1.27-4.88-4.24-5.03-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.47.12.65-.07.18-.2.74-.86.94-1.16.2-.3.39-.25.66-.15.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.13.07.72-.17 1.4z"/></svg><span>WhatsApp</span>
+    </button>
+    <button class="tab-box" role="tab" aria-selected="false" onclick="switchPlatform('telegram', this)">
+      <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#26A5E4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg><span>Telegram</span>
+    </button>
+  </div>
+  <div id="platformPanelCard" class="tab-panel-card">
+    <div class="panel-header">
+      <div class="panel-platform">
+        <div id="panelBadge" class="panel-icon-badge" style="background:linear-gradient(135deg,#0084FF,#00C6FF)">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/></svg>
+        </div>
+        <div>
+          <h2 id="panelTitle" class="text-sm font-bold leading-tight">Facebook Messenger</h2>
+          <p id="panelHandle" class="text-xs" style="color:var(--text-secondary)">@openworldxbd</p>
+        </div>
+      </div>
+      <span class="fast-reply-badge"><span class="fast-reply-dot"></span>Fast Reply</span>
+    </div>
+    <p id="panelDesc" class="text-xs leading-relaxed" style="color:var(--text-secondary)">Direct message for custom web apps, UI/UX design inquiries, automation bots, and instant project support.</p>
+    <a id="panelCtaBtn" href="https://m.me/openworldxbd" target="_blank" rel="noopener noreferrer" class="panel-cta-btn" style="background:linear-gradient(135deg,#0084FF,#2563EB)">
+      <span id="panelCtaText">Chat on Messenger</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </a>
+  </div>
+</section>
 
-            <div class="nav-actions">
-                <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Switch Theme" title="Toggle Dark/Light Theme">
-                    <svg id="sunIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg id="moonIcon" class="hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
-            </div>
-        </header>
+<p class="section-label">Official Channels &amp; Links</p>
+<section class="links-stack">
+  <a href="https://t.me/openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
+    <div class="link-card-left">
+      <div class="link-icon-box" style="background:rgba(38,165,228,.16);color:#26A5E4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg></div>
+      <div><div class="text-sm font-bold">Join Telegram Channel</div><div class="text-xs" style="color:var(--text-secondary)">@openworldxbd • Releases &amp; Updates</div></div>
+    </div>
+    <div class="link-arrow-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+  </a>
+  <a href="https://youtube.com/@openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
+    <div class="link-card-left">
+      <div class="link-icon-box" style="background:rgba(239,68,68,.16);color:#ef4444"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></div>
+      <div><div class="text-sm font-bold">YouTube Official</div><div class="text-xs" style="color:var(--text-secondary)">Tutorials, Tech &amp; Dev Showcases</div></div>
+    </div>
+    <div class="link-arrow-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+  </a>
+  <a href="https://facebook.com/openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
+    <div class="link-card-left">
+      <div class="link-icon-box" style="background:rgba(59,130,246,.16);color:#3b82f6"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></div>
+      <div><div class="text-sm font-bold">Facebook Page</div><div class="text-xs" style="color:var(--text-secondary)">Community &amp; Project Highlights</div></div>
+    </div>
+    <div class="link-arrow-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+  </a>
+</section>
 
-        <!-- Hero Profile Card -->
-        <section class="hero-card">
-            <div class="avatar-wrapper">
-                <div class="avatar-dotted-ring"></div>
-                <div class="avatar-dotted-ring-inner"></div>
-                <div class="avatar-circle">
-                    <img src="20175_2.png" alt="OPENWORLDXBD Portrait" onerror="renderPortraitFallback(this)">
-                </div>
-            </div>
+<section class="code-window-card" aria-label="Developer Live Code Preview">
+  <div class="code-window-header">
+    <div class="window-dots"><span class="win-dot" style="background:#ef4444"></span><span class="win-dot" style="background:#f59e0b"></span><span class="win-dot" style="background:#10b981"></span></div>
+    <span class="live-status-pill" aria-label="Live"><span class="live-status-dot"></span></span>
+  </div>
+  <div class="code-viewport"><div class="code-scroll-track" id="codeTrack"></div></div>
+</section>
 
-            <div class="hero-title-row">
-                <h1 class="hero-name">OPENWORLDX<span class="bd-small">BD</span></h1>
-                <svg class="hero-verified-badge" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified">
-                    <path d="M12 2L14.8 4.2L18.4 3.9L19.6 7.3L22.6 9.3L21.5 12.8L22.6 16.3L19.6 18.3L18.4 21.7L14.8 21.4L12 23.6L9.2 21.4L5.6 21.7L4.4 18.3L1.4 16.3L2.5 12.8L1.4 9.3L4.4 7.3L5.6 3.9L9.2 4.2L12 2ZM10.4 16.2L17.1 9.5L15.7 8.1L10.4 13.4L8.3 11.3L6.9 12.7L10.4 16.2Z"/>
-                </svg>
-            </div>
-            <div class="hero-owxbd-tag">O W X B D</div>
-            <p class="hero-subtitle"><span id="typingText">Assalamualaikum - আসসালামু আলাইকুম</span></p>
-        </section>
+<footer class="footer-note"><span>© Crafted with OPENWORLDXBD - 2026</span></footer>
+</main>
 
-        <!-- Lively Messaging Tabs -->
-        <section aria-label="Direct Messaging Platforms">
-            <div class="tabs-grid" role="tablist">
-                <button class="tab-box active" role="tab" aria-selected="true" onclick="switchPlatform('messenger', this)">
-                    <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#0084FF">
-                        <path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/>
-                    </svg>
-                    <span>Messenger</span>
-                </button>
+<script>
+/* Fallback avatar when 20175_2.png is missing */
+function renderPortraitFallback(img){
+  img.onerror = null;
+  img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#f97316"/></linearGradient></defs><rect width="100" height="100" fill="url(#g)"/><text x="50" y="62" font-family="Arial,sans-serif" font-size="34" font-weight="700" fill="#fff" text-anchor="middle">OW</text></svg>');
+}
 
-                <button class="tab-box" role="tab" aria-selected="false" onclick="switchPlatform('whatsapp', this)">
-                    <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#25D366">
-                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.96 1.38-.51.08-1.15.11-1.85-.11-.43-.14-.98-.32-1.68-.62-2.95-1.27-4.88-4.24-5.03-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.47.12.65-.07.18-.2.74-.86.94-1.16.2-.3.39-.25.66-.15.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.13.07.72-.17 1.4z"/>
-                    </svg>
-                    <span>WhatsApp</span>
-                </button>
+/* Theme toggle */
+(function(){
+  const root = document.documentElement, btn = document.getElementById('themeToggleBtn');
+  const sun = document.getElementById('sunIcon'), moon = document.getElementById('moonIcon');
+  function apply(light){
+    root.classList.toggle('light-theme', light);
+    root.setAttribute('data-theme', light ? 'light' : 'dark');
+    sun.classList.toggle('hidden', light);
+    moon.classList.toggle('hidden', !light);
+    try { localStorage.setItem('owxbd-theme', light ? 'light' : 'dark'); } catch(e){}
+  }
+  let saved = null;
+  try { saved = localStorage.getItem('owxbd-theme'); } catch(e){}
+  if (saved) apply(saved === 'light');
+  btn.addEventListener('click', () => apply(!root.classList.contains('light-theme')));
+})();
 
-                <button class="tab-box" role="tab" aria-selected="false" onclick="switchPlatform('telegram', this)">
-                    <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#26A5E4">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
-                    </svg>
-                    <span>Telegram</span>
-                </button>
-            </div>
+/* Code window (built once, duplicated for seamless loop) */
+(function(){
+  const rows = [
+    '<span class="tok-kw">const</span> <span class="tok-var">dev</span> = {',
+    '  <span class="tok-prop">brand</span>: <span class="tok-str">"OPENWORLDXBD"</span>,',
+    '  <span class="tok-prop">greeting</span>: <span class="tok-str">"Assalamualaikum - আসসালামু আলাইকুম"</span>,',
+    '  <span class="tok-prop">builds</span>: [<span class="tok-str">"Web"</span>, <span class="tok-str">"APK"</span>, <span class="tok-str">"Bot"</span>, <span class="tok-str">"API"</span>],',
+    '  <span class="tok-prop">uiSystem</span>: <span class="tok-str">"UI UX Pro Max"</span>,',
+    '  <span class="tok-prop">available</span>: <span class="tok-bool">true</span>',
+    '};',
+    '<span class="tok-var">dev</span>.<span class="tok-prop">launch</span>();'
+  ];
+  const html = rows.map((r,i)=>'<div class="code-line"><span class="line-num">'+(i+1)+'</span><span>'+r+'</span></div>').join('');
+  document.getElementById('codeTrack').innerHTML = html + html;
+})();
 
-            <!-- Active Platform Details Card -->
-            <div id="platformPanelCard" class="tab-panel-card mt-3">
-                <div class="panel-header">
-                    <div class="panel-platform">
-                        <div id="panelBadge" class="panel-icon-badge" style="background: linear-gradient(135deg, #0084FF, #00C6FF);">
-                            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 id="panelTitle" class="text-sm font-bold leading-tight">Facebook Messenger</h2>
-                            <p id="panelHandle" class="text-xs" style="color: var(--text-secondary);">@openworldxbd</p>
-                        </div>
-                    </div>
-                    <span class="fast-reply-badge">
-                        <span class="fast-reply-dot"></span>
-                        Fast Reply
-                    </span>
-                </div>
-                <p id="panelDesc" class="text-xs leading-relaxed" style="color: var(--text-secondary);">
-                    Direct message for custom web apps, UI/UX design inquiries, automation bots, and instant project support.
-                </p>
-                <a id="panelCtaBtn" href="https://m.me/openworldxbd" target="_blank" rel="noopener noreferrer" class="panel-cta-btn" style="background: linear-gradient(135deg, #0084FF, #2563EB);">
-                    <span id="panelCtaText">Chat on Messenger</span>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                </a>
-            </div>
-        </section>
+/* Typing animation */
+(function(){
+  const el = document.getElementById('typingText');
+  const phrase = 'Assalamualaikum - আসসালামু আলাইকুম';
+  const chars = (typeof Intl !== 'undefined' && Intl.Segmenter)
+    ? Array.from(new Intl.Segmenter('bn',{granularity:'grapheme'}).segment(phrase), s=>s.segment)
+    : Array.from(phrase);
+  let i = 0, del = false;
+  function step(){
+    if (!del){
+      if (i < chars.length){
+        const s = document.createElement('span'); s.className='typed-char'; s.textContent=chars[i++]; el.appendChild(s); setTimeout(step,58);
+      } else { del = true; setTimeout(step,2600); }
+    } else if (i > 0){
+      const last = el.lastElementChild;
+      if (last){ last.style.opacity='0'; last.style.transform='translateY(-2px)'; }
+      setTimeout(()=>{ if (el.lastElementChild) el.removeChild(el.lastElementChild); i--; step(); },34);
+    } else { del = false; setTimeout(step,550); }
+  }
+  step();
+})();
 
-        <!-- Direct Connect Channels -->
-        <p class="section-label">Official Channels & Links</p>
-        <section class="links-stack">
-            <a href="https://t.me/openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
-                <div class="link-card-left">
-                    <div class="link-icon-box" style="background: rgba(38, 165, 228, 0.16); color: #26A5E4;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="text-sm font-bold">Join Telegram Channel</div>
-                        <div class="text-xs" style="color: var(--text-secondary);">@openworldxbd • Releases & Updates</div>
-                    </div>
-                </div>
-                <div class="link-arrow-circle">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                </div>
-            </a>
+/* Platform tabs */
+const svgPaths = {
+  messenger:'<path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/>',
+  whatsapp:'<path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.96 1.38-.51.08-1.15.11-1.85-.11-.43-.14-.98-.32-1.68-.62-2.95-1.27-4.88-4.24-5.03-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.47.12.65-.07.18-.2.74-.86.94-1.16.2-.3.39-.25.66-.15.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.13.07.72-.17 1.4z"/>',
+  telegram:'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>'
+};
+const platformData = {
+  messenger:{title:'Facebook Messenger',handle:'@openworldxbd',desc:'Direct message for custom web apps, UI/UX design inquiries, automation bots, and instant project support.',ctaText:'Chat on Messenger',url:'https://m.me/openworldxbd',badgeBg:'linear-gradient(135deg,#0084FF,#00C6FF)',btnBg:'linear-gradient(135deg,#0084FF,#2563EB)'},
+  whatsapp:{title:'WhatsApp Direct',handle:'+880 • Official Business',desc:'Connect directly on WhatsApp for fast consultations, order updates, and dedicated client communication.',ctaText:'Message on WhatsApp',url:'https://wa.me/8801700000000',badgeBg:'linear-gradient(135deg,#25D366,#128C7E)',btnBg:'linear-gradient(135deg,#25D366,#059669)'},
+  telegram:{title:'Telegram Official',handle:'@openworldxbd',desc:'Reach out on Telegram for APK releases, bot commands, private API access, and instant developer chat.',ctaText:'Open Telegram Chat',url:'https://t.me/openworldxbd',badgeBg:'linear-gradient(135deg,#26A5E4,#0284C7)',btnBg:'linear-gradient(135deg,#26A5E4,#0369A1)'}
+};
+function switchPlatform(key, btn){
+  const d = platformData[key]; if (!d) return;
+  document.querySelectorAll('.tab-box').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
+  btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+  const card = document.getElementById('platformPanelCard');
+  card.style.animation='none'; void card.offsetWidth; card.style.animation='motionBlurPanel .36s cubic-bezier(.22,1,.36,1) both';
+  const badge = document.getElementById('panelBadge');
+  badge.style.background = d.badgeBg;
+  badge.innerHTML = '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">'+svgPaths[key]+'</svg>';
+  document.getElementById('panelTitle').textContent = d.title;
+  document.getElementById('panelHandle').textContent = d.handle;
+  document.getElementById('panelDesc').textContent = d.desc;
+  const cta = document.getElementById('panelCtaBtn'); cta.href = d.url; cta.style.background = d.btnBg;
+  document.getElementById('panelCtaText').textContent = d.ctaText;
+}
 
-            <a href="https://youtube.com/@openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
-                <div class="link-card-left">
-                    <div class="link-icon-box" style="background: rgba(239, 68, 68, 0.16); color: #ef4444;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="text-sm font-bold">YouTube Official</div>
-                        <div class="text-xs" style="color: var(--text-secondary);">Tutorials, Tech & Dev Showcases</div>
-                    </div>
-                </div>
-                <div class="link-arrow-circle">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                </div>
-            </a>
-
-            <a href="https://facebook.com/openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
-                <div class="link-card-left">
-                    <div class="link-icon-box" style="background: rgba(59, 130, 246, 0.16); color: #3b82f6;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="text-sm font-bold">Facebook Page</div>
-                        <div class="text-xs" style="color: var(--text-secondary);">Community & Project Highlights</div>
-                    </div>
-                </div>
-                <div class="link-arrow-circle">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                </div>
-            </a>
-        </section>
-
-        <!-- Live Animated Code Window Card -->
-        <section class="code-window-card" aria-label="Developer Live Code Preview">
-            <div class="code-window-header">
-                <div class="window-dots">
-                    <span class="win-dot" style="background: #ef4444;"></span>
-                    <span class="win-dot" style="background: #f59e0b;"></span>
-                    <span class="win-dot" style="background: #10b981;"></span>
-                </div>
-                <span class="live-status-pill" aria-label="Live">
-                    <span class="live-status-dot"></span>
-                </span>
-            </div>
-
-            <div class="code-viewport">
-                <div class="code-scroll-track">
-                    <div class="code-line"><span class="line-num">1</span><span><span class="tok-kw">const</span> <span class="tok-var">dev</span> = {</span></div>
-                    <div class="code-line"><span class="line-num">2</span><span>  <span class="tok-prop">brand</span>: <span class="tok-str">"OPENWORLDXBD"</span>,</span></div>
-                    <div class="code-line"><span class="line-num">3</span><span>  <span class="tok-prop">greeting</span>: <span class="tok-str">"Assalamualaikum - আসসালামু আলাইকুম"</span>,</span></div>
-                    <div class="code-line"><span class="line-num">4</span><span>  <span class="tok-prop">builds</span>: [<span class="tok-str">"Web"</span>, <span class="tok-str">"APK"</span>, <span class="tok-str">"Bot"</span>, <span class="tok-str">"API"</span>],</span></div>
-                    <div class="code-line"><span class="line-num">5</span><span>  <span class="tok-prop">uiSystem</span>: <span class="tok-str">"UI UX Pro Max"</span>,</span></div>
-                    <div class="code-line"><span class="line-num">6</span><span>  <span class="tok-prop">available</span>: <span class="tok-bool">true</span></span></div>
-                    <div class="code-line"><span class="line-num">7</span><span>};</span></div>
-                    <div class="code-line"><span class="line-num">8</span><span><span class="tok-var">dev</span>.<span class="tok-prop">launch</span>();</span></div>
-                    <!-- Duplicate set for seamless infinite loop -->
-                    <div class="code-line"><span class="line-num">1</span><span><span class="tok-kw">const</span> <span class="tok-var">dev</span> = {</span></div>
-                    <div class="code-line"><span class="line-num">2</span><span>  <span class="tok-prop">brand</span>: <span class="tok-str">"OPENWORLDXBD"</span>,</span></div>
-                    <div class="code-line"><span class="line-num">3</span><span>  <span class="tok-prop">greeting</span>: <span class="tok-str">"Assalamualaikum - আসসালামু আলাইকুম"</span>,</span></div>
-                    <div class="code-line"><span class="line-num">4</span><span>  <span class="tok-prop">builds</span>: [<span class="tok-str">"Web"</span>, <span class="tok-str">"APK"</span>, <span class="tok-str">"Bot"</span>, <span class="tok-str">"API"</span>],</span></div>
-                    <div class="code-line"><span class="line-num">5</span><span>  <span class="tok-prop">uiSystem</span>: <span class="tok-str">"UI UX Pro Max"</span>,</span></div>
-                    <div class="code-line"><span class="line-num">6</span><span>  <span class="tok-prop">available</span>: <span class="tok-bool">true</span></span></div>
-                    <div class="code-line"><span class="line-num">7</span><span>};</span></div>
-                    <div class="code-line"><span class="line-num">8</span><span><span class="tok-var">dev</span>.<span class="tok-prop">launch</span>();</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Bottom Copyright Footer -->
-        <footer class="footer-note">
-            <span>© Crafted with OPENWORLDXBD - 2026</span>
-        </footer>
-    </main>
-
-    <script id="mainScript">
-        /* ==========================================================================
-           1. PORTRAIT SVG FALLBACK (IN CASE LOCAL IMAGE 20175_2.png IS NOT IN SANDBOX)
-           ========================================================================== */
-        function renderPortraitFallback(imgEl) {
-            const parent = imgEl.parentElement;
-            if (!parent) return;
-            parent.innerHTML = `
-                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="Portrait Avatar">
-                    <defs>
-                        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#f8fafc"/>
-                            <stop offset="100%" stop-color="#e2e8f0"/>
-                        </linearGradient>
-                        <linearGradient id="tieGrad" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#1e3a8a"/>
-                            <stop offset="100%" stop-color="#0f172a"/>
-                        </linearGradient>
-                    </defs>
-                    <rect width="120" height="120" fill="url(#bgGrad)"/>
-                    <path d="M16 120 C18 95, 36 88, 60 88 C84 88, 102 95, 104 120 Z" fill="#0f172a"/>
-                    <polygon points="46,88 60,116 74,88" fill="#ffffff"/>
-                    <polygon points="57,91 63,91 65,116 60,120 55,116" fill="url(#tieGrad)"/>
-                    <rect x="52" y="72" width="16" height="18" rx="6" fill="#eab896"/>
-                    <path d="M40 46 C40 28, 80 28, 80 46 C80 65, 71 78, 60 78 C49 78, 40 65, 40 46 Z" fill="#f3c6a5"/>
-                    <path d="M38 46 C37 25, 53 18, 68 21 C80 23, 84 34, 81 46 C77 35, 67 32, 54 34 C45 35, 41 40, 38 46 Z" fill="#1e1b18"/>
-                    <path d="M46 44 Q51 42 55 44" stroke="#292524" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                    <path d="M65 44 Q69 42 74 44" stroke="#292524" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                    <circle cx="51" cy="48" r="2.2" fill="#1c1917"/>
-                    <circle cx="69" cy="48" r="2.2" fill="#1c1917"/>
-                    <path d="M54 63 Q60 67 66 63" stroke="#9a5b4a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                </svg>
-            `;
-        }
-
-        /* ==========================================================================
-           2. INSTANT ZERO-FLICKER THEME TOGGLE
-           ========================================================================== */
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
-        const sunIcon = document.getElementById('sunIcon');
-        const moonIcon = document.getElementById('moonIcon');
-        const htmlRoot = document.documentElement;
-
-        function applyTheme(isLight) {
-            if (isLight) {
-                htmlRoot.classList.add('light-theme');
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-            } else {
-                htmlRoot.classList.remove('light-theme');
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-            }
-        }
-
-        const savedTheme = localStorage.getItem('owxbd_theme');
-        applyTheme(savedTheme === 'light');
-
-        themeToggleBtn.addEventListener('click', () => {
-            const willBeLight = !htmlRoot.classList.contains('light-theme');
-            applyTheme(willBeLight);
-            localStorage.setItem('owxbd_theme', willBeLight ? 'light' : 'dark');
-        });
-
-        /* ==========================================================================
-           3. AUTO-TYPING LOOP FOR "Assalamualaikum - আসসালামু আলাইকুম"
-           ========================================================================== */
-        (function initTypingLoop() {
-            const typingEl = document.getElementById('typingText');
-            const phrase = 'Assalamualaikum - আসসালামু আলাইকুম';
-            let idx = phrase.length;
-            let deleting = false;
-
-            function step() {
-                if (!deleting) {
-                    idx++;
-                    typingEl.textContent = phrase.slice(0, idx);
-                    if (idx >= phrase.length) {
-                        deleting = true;
-                        setTimeout(step, 2200);
-                        return;
-                    }
-                    setTimeout(step, 95);
-                } else {
-                    idx--;
-                    typingEl.textContent = phrase.slice(0, Math.max(1, idx));
-                    if (idx <= 1) {
-                        deleting = false;
-                        setTimeout(step, 450);
-                        return;
-                    }
-                    setTimeout(step, 55);
-                }
-            }
-            setTimeout(() => { deleting = true; step(); }, 2200);
-        })();
-
-        /* ==========================================================================
-           4. MESSENGER / WHATSAPP / TELEGRAM TAB SWITCHER
-           ========================================================================== */
-        const platformData = {
-            messenger: {
-                title: 'Facebook Messenger',
-                handle: '@openworldxbd',
-                desc: 'Direct message for custom web apps, UI/UX design inquiries, automation bots, and instant project support.',
-                ctaText: 'Chat on Messenger',
-                url: 'https://m.me/openworldxbd',
-                badgeBg: 'linear-gradient(135deg, #0084FF, #00C6FF)',
-                btnBg: 'linear-gradient(135deg, #0084FF, #2563EB)',
-                iconSvg: '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/></svg>'
-            },
-            whatsapp: {
-                title: 'WhatsApp Direct',
-                handle: '+880 • Official Business',
-                desc: 'Connect directly on WhatsApp for fast consultations, order updates, and dedicated client communication.',
-                ctaText: 'Message on WhatsApp',
-                url: 'https://wa.me/8801700000000',
-                badgeBg: 'linear-gradient(135deg, #25D366, #128C7E)',
-                btnBg: 'linear-gradient(135deg, #25D366, #059669)',
-                iconSvg: '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.96 1.38-.51.08-1.15.11-1.85-.11-.43-.14-.98-.32-1.68-.62-2.95-1.27-4.88-4.24-5.03-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.47.12.65-.07.18-.2.74-.86.94-1.16.2-.3.39-.25.66-.15.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.13.07.72-.17 1.4z"/></svg>'
-            },
-            telegram: {
-                title: 'Telegram Official',
-                handle: '@openworldxbd',
-                desc: 'Reach out on Telegram for APK releases, bot commands, private API access, and instant developer chat.',
-                ctaText: 'Open Telegram Chat',
-                url: 'https://t.me/openworldxbd',
-                badgeBg: 'linear-gradient(135deg, #26A5E4, #0284C7)',
-                btnBg: 'linear-gradient(135deg, #26A5E4, #0369A1)',
-                iconSvg: '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>'
-            }
-        };
-
-        function switchPlatform(key, btnEl) {
-            const data = platformData[key];
-            if (!data) return;
-
-            document.querySelectorAll('.tab-box').forEach(tab => {
-                tab.classList.remove('active');
-                tab.setAttribute('aria-selected', 'false');
-            });
-            btnEl.classList.add('active');
-            btnEl.setAttribute('aria-selected', 'true');
-
-            const panelCard = document.getElementById('platformPanelCard');
-            panelCard.style.animation = 'none';
-            void panelCard.offsetWidth;
-            panelCard.style.animation = 'motionBlurPanel 0.36s cubic-bezier(0.22, 1, 0.36, 1) both';
-
-            document.getElementById('panelBadge').style.background = data.badgeBg;
-            document.getElementById('panelBadge').innerHTML = data.iconSvg;
-            document.getElementById('panelTitle').textContent = data.title;
-            document.getElementById('panelHandle').textContent = data.handle;
-            document.getElementById('panelDesc').textContent = data.desc;
-            const ctaBtn = document.getElementById('panelCtaBtn');
-            ctaBtn.href = data.url;
-            ctaBtn.style.background = data.btnBg;
-            document.getElementById('panelCtaText').textContent = data.ctaText;
-        }
-
-        /* ==========================================================================
-           5. FALLING GLOWING STAR PARTICLES (TOP TO BOTTOM)
-           ========================================================================== */
-        window.addEventListener('load', () => {
-            const canvas = document.getElementById('starfieldCanvas');
-            const ctx = canvas.getContext('2d');
-            let width = 0;
-            let height = 0;
-            let stars = [];
-
-            function resizeCanvas() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            }
-
-            function createStars(count) {
-                const palette = [
-                    [59, 130, 246],  // Royal Blue
-                    [96, 165, 250],  // Sky Blue
-                    [251, 146, 60],  // Warm Amber Orange
-                    [249, 115, 22],  // Deep Orange
-                    [148, 163, 184]  // Soft Silver Star
-                ];
-                stars = [];
-                for (let i = 0; i < count; i++) {
-                    stars.push({
-                        x: Math.random() * width,
-                        y: Math.random() * height,
-                        radius: Math.random() * 1.8 + 0.7,
-                        speedY: Math.random() * 0.85 + 0.35,
-                        speedX: (Math.random() - 0.5) * 0.22,
-                        alpha: Math.random() * 0.7 + 0.3,
-                        rgb: palette[i % palette.length]
-                    });
-                }
-            }
-
-            function animateStars() {
-                ctx.clearRect(0, 0, width, height);
-                const isLight = document.documentElement.classList.contains('light-theme');
-
-                for (let i = 0; i < stars.length; i++) {
-                    const s = stars[i];
-                    s.y += s.speedY;
-                    s.x += s.speedX;
-
-                    if (s.y > height + 6) {
-                        s.y = -6;
-                        s.x = Math.random() * width;
-                    }
-                    if (s.x < 0) s.x = width;
-                    if (s.x > width) s.x = 0;
-
-                    ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-                    const opacity = isLight ? s.alpha * 0.65 : s.alpha;
-                    ctx.fillStyle = `rgba(${s.rgb[0]}, ${s.rgb[1]}, ${s.rgb[2]}, ${opacity})`;
-                    ctx.fill();
-                }
-                requestAnimationFrame(animateStars);
-            }
-
-            resizeCanvas();
-            createStars(48);
-            animateStars();
-
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-                createStars(48);
-            });
-        });
-    </script>
+/* Falling stars */
+window.addEventListener('load', () => {
+  const canvas = document.getElementById('starfieldCanvas'), ctx = canvas.getContext('2d');
+  let w = 0, h = 0, stars = [];
+  const palette = [[59,130,246],[96,165,250],[251,146,60],[249,115,22],[148,163,184]];
+  function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+  function make(n){
+    stars = [];
+    for (let i=0;i<n;i++) stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.8+.7,vy:Math.random()*.85+.35,vx:(Math.random()-.5)*.22,a:Math.random()*.7+.3,c:palette[i%palette.length]});
+  }
+  function loop(){
+    ctx.clearRect(0,0,w,h);
+    const light = document.documentElement.classList.contains('light-theme');
+    for (const s of stars){
+      s.y += s.vy; s.x += s.vx;
+      if (s.y > h+6){ s.y = -6; s.x = Math.random()*w; }
+      if (s.x < 0) s.x = w; if (s.x > w) s.x = 0;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = 'rgba('+s.c[0]+','+s.c[1]+','+s.c[2]+','+(light?s.a*.65:s.a)+')'; ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  resize(); make(48); loop();
+  addEventListener('resize', () => { resize(); make(48); });
+});
+</script>
 </body>
 </html>
