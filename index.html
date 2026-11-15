@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Openworldxbd — Digital Portfolio &amp; Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: #f8fafc;
+      --surface-card: rgba(255, 255, 255, 0.88);
+      --surface-elevated: rgba(241, 245, 249, 0.92);
+      --border-subtle: rgba(15, 23, 42, 0.08);
+      --border-highlight: rgba(59, 130, 246, 0.25);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-blue: #2563eb;
+      --accent-amber: #d97706;
+      --accent-violet: #7c3aed;
+      --shadow-card: 0 12px 32px -8px rgba(15, 23, 42, 0.08);
+      --mesh-bg:
+        radial-gradient(circle at 20% 15%, rgba(59, 130, 246, 0.14), transparent 48%),
+        radial-gradient(circle at 82% 22%, rgba(245, 158, 11, 0.12), transparent 46%),
+        radial-gradient(circle at 50% 85%, rgba(124, 58, 237, 0.10), transparent 52%),
+        #f8fafc;
+    }
+
+    html.dark {
+      color-scheme: dark;
+      --bg-base: #05070c;
+      --surface-card: rgba(13, 18, 30, 0.76);
+      --surface-elevated: rgba(20, 27, 45, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.09);
+      --border-highlight: rgba(96, 165, 250, 0.35);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #38bdf8;
+      --accent-amber: #fbbf24;
+      --accent-violet: #a78bfa;
+      --shadow-card: 0 20px 44px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      --mesh-bg:
+        radial-gradient(circle at 18% 14%, rgba(37, 99, 235, 0.28), transparent 46%),
+        radial-gradient(circle at 85% 24%, rgba(245, 158, 11, 0.20), transparent 45%),
+        radial-gradient(circle at 48% 82%, rgba(109, 40, 217, 0.22), transparent 52%),
+        #05070c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--mesh-bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Top Glass Navbar */
+    .top-nav {
+      position: sticky;
+      top: 12px;
+      z-index: 40;
+      width: calc(100% - 28px);
+      max-width: 440px;
+      height: 54px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--surface-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .avatar-ring-wrap {
+      position: relative;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-pulse {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #38bdf8, #fbbf24, #a78bfa, #38bdf8);
+      opacity: 0.55;
+      filter: blur(4px);
+      animation: pulseGlow 3.2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(0.95); opacity: 0.45; }
+      50% { transform: scale(1.12); opacity: 0.85; }
+    }
+
+    .bd-logo-circle {
+      position: relative;
+      z-index: 2;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #006a4e 0%, #004d38 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .brand-title-nav {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .theme-toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .theme-toggle-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* Main Container */
+    .app-shell {
+      width: 100%;
+      max-width: 440px;
+      padding: 20px 16px 96px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* View Transitions */
+    .view-section {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .view-section.active {
+      display: flex;
+    }
+
+    .view-section.zoom-center-in {
+      animation: zoomFromCenter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform-origin: center center;
+    }
+
+    @keyframes zoomFromCenter {
+      0% { opacity: 0; transform: scale(0.88); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Hero Card */
+    .hero-card {
+      background: var(--surface-card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: var(--shadow-card);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 14px;
+    }
+
+    .hero-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 48%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    html:not(.dark) .hero-name {
+      background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 52%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-bio {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      max-width: 330px;
+      margin: 0 auto 20px;
+    }
+
+    /* Metrics Row */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .metric-box {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .metric-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .metric-val.blue { color: var(--accent-blue); }
+    .metric-val.amber { color: var(--accent-amber); }
+    .metric-val.violet { color: var(--accent-violet); }
+
+    .metric-lbl {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* Segmented 3-Tab Row */
+    .segmented-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .seg-tab-btn {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-card);
+    }
+
+    .seg-tab-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .seg-tab-btn.active {
+      color: var(--text-primary);
+      border-color: var(--border-highlight);
+      background: linear-gradient(145deg, rgba(56, 189, 248, 0.16), rgba(251, 191, 36, 0.12));
+    }
+
+    html:not(.dark) .seg-tab-btn.active {
+      background: linear-gradient(145deg, rgba(37, 99, 235, 0.10), rgba(217, 119, 6, 0.08));
+      border-color: rgba(37, 99, 235, 0.35);
+    }
+
+    /* Dropdown Popup Card */
+    .tab-dropdown-card {
+      background: var(--surface-card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dropdown-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px 4px;
+    }
+
+    .dropdown-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .dropdown-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent-blue);
+    }
+
+    .popup-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 14px;
+      border-radius: 15px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .popup-action-row:active {
+      transform: scale(0.985);
+    }
+
+    .action-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .action-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent-blue);
+      flex-shrink: 0;
+    }
+
+    .action-icon-box.amber {
+      background: rgba(251, 191, 36, 0.14);
+      color: var(--accent-amber);
+    }
+
+    .action-info h4 {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .action-info p {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+
+    /* Contact View */
+    .contact-card {
+      background: var(--surface-card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 22px 18px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contact-header h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    html:not(.dark) .contact-header h2 {
+      background: linear-gradient(135deg, #1d4ed8, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .contact-header p {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-input,
+    .form-textarea,
+    .custom-select-trigger {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .custom-select-trigger.open {
+      border-color: var(--accent-blue);
+    }
+
+    .form-textarea {
+      min-height: 92px;
+      resize: none;
+    }
+
+    /* Custom Multi-Color Theme Select Popup */
+    .custom-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .custom-select-menu {
+      display: none;
+      flex-direction: column;
+      margin-top: 6px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-highlight);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.22), transparent 55%),
+        radial-gradient(circle at 85% 80%, rgba(251, 191, 36, 0.18), transparent 55%),
+        #0c1220;
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.55);
+    }
+
+    html:not(.dark) .custom-select-menu {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.14), transparent 55%),
+        radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.12), transparent 55%),
+        #ffffff;
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.14);
+    }
+
+    .custom-select-menu.open {
+      display: flex;
+    }
+
+    .custom-option {
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+    }
+
+    .custom-option:last-child {
+      border-bottom: none;
+    }
+
+    .radio-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .custom-option.selected .radio-dot {
+      border-color: #38bdf8;
+    }
+
+    .custom-option.selected .radio-dot::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #fbbf24);
+    }
+
+    .submit-btn {
+      margin-top: 4px;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 52%, #d97706 100%);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Floating Circular Support Button with Ambient Glow */
+    .floating-support-wrap {
+      position: fixed;
+      right: 20px;
+      bottom: 22px;
+      z-index: 50;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .support-pulse-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(from 45deg, #38bdf8, #fbbf24, #a78bfa, #38bdf8);
+      opacity: 0.6;
+      filter: blur(5px);
+      animation: pulseGlow 3.2s ease-in-out infinite;
+    }
+
+    .floating-support-btn {
+      position: relative;
+      z-index: 2;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 60%, #78350f 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    }
+
+    .floating-support-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* Toast Notification */
+    .toast-banner {
+      position: fixed;
+      bottom: 84px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface-card);
+      border: 1px solid var(--border-highlight);
+      color: var(--text-primary);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 60;
+      box-shadow: var(--shadow-card);
+    }
+
+    .toast-banner.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="brand-cluster" onclick="switchView('home')">
+      <div class="avatar-ring-wrap">
+        <div class="avatar-pulse"></div>
+        <div class="bd-logo-circle" aria-label="BD Emblem">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="12" r="6" fill="#f42a41" />
+            <text x="12" y="15.5" text-anchor="middle" fill="#ffffff" font-family="Plus Jakarta Sans, sans-serif" font-weight="800" font-size="8.5">BD</text>
+          </svg>
+        </div>
+      </div>
+      <span class="brand-title-nav">Openworldxbd</span>
+    </div>
+
+    <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" onclick="toggleTheme()">
+      <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+      </svg>
+      <svg id="themeIconMoon" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <main class="app-shell">
+    <!-- HOME VIEW -->
+    <section id="homeView" class="view-section active">
+      <div class="hero-card">
+        <div class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Verified Digital Creator
+        </div>
+        <h1 class="hero-name">Openworldxbd</h1>
+        <p class="hero-bio">
+          Building ultra-lightweight mobile web apps, modern UI/UX interfaces, and open-source digital tools engineered for instant speed.
+        </p>
+
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-val blue">0ms</div>
+            <div class="metric-lbl">Zero Lag UI</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val amber">100%</div>
+            <div class="metric-lbl">Mobile First</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val violet">KSA</div>
+            <div class="metric-lbl">Global Hub</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Segmented 3 Separate Buttons -->
+      <div class="segmented-tabs" role="tablist">
+        <button class="seg-tab-btn" id="tab-messenger" onclick="selectSocialTab('messenger')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+          Messenger
+        </button>
+
+        <button class="seg-tab-btn active" id="tab-whatsapp" onclick="selectSocialTab('whatsapp')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          WhatsApp
+        </button>
+
+        <button class="seg-tab-btn" id="tab-telegram" onclick="selectSocialTab('telegram')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          Telegram
+        </button>
+      </div>
+
+      <!-- Popup Dropdown Area (WhatsApp Open by Default) -->
+      <div class="tab-dropdown-card" id="socialDropdownCard"></div>
+    </section>
+
+    <!-- CONTACT VIEW -->
+    <section id="contactView" class="view-section">
+      <div class="contact-card">
+        <div class="contact-header">
+          <h2>Contact Openworldxbd</h2>
+          <p>Send a direct inquiry for custom apps, lightweight web tools, or collaborations.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="senderName">Your Name</label>
+          <input class="form-input" id="senderName" type="text" placeholder="Enter your name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preferred Platform</label>
+          <div class="custom-select-trigger" id="platformTrigger" onclick="togglePlatformMenu()">
+            <span id="selectedPlatformText">WhatsApp</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+
+          <div class="custom-select-menu" id="platformMenu">
+            <div class="custom-option selected" onclick="choosePlatform('WhatsApp', this)">
+              <span>WhatsApp</span>
+              <span class="radio-dot"></span>
+            </div>
+            <div class="custom-option" onclick="choosePlatform('Messenger', this)">
+              <span>Messenger</span>
+              <span class="radio-dot"></span>
+            </div>
+            <div class="custom-option" onclick="choosePlatform('Telegram', this)">
+              <span>Telegram</span>
+              <span class="radio-dot"></span>
+            </div>
+            <div class="custom-option" onclick="choosePlatform('Email', this)">
+              <span>Email</span>
+              <span class="radio-dot"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="senderMessage">Message</label>
+          <textarea class="form-textarea" id="senderMessage" placeholder="Write your message here..."></textarea>
+        </div>
+
+        <button class="submit-btn" onclick="handleContactSubmit()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          Send Message
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Circular Support Button -->
+  <div class="floating-support-wrap">
+    <div class="support-pulse-ring"></div>
+    <button class="floating-support-btn" id="supportFloatingBtn" aria-label="Support &amp; Contact" onclick="toggleContactView()">
+      <svg id="supportIconChat" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <svg id="supportIconBack" style="display:none;" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <div class="toast-banner" id="toastBanner">Message prepared!</div>
+
+  <script>
+    const socialData = {
+      whatsapp: {
+        title: 'WhatsApp Connect',
+        badge: 'Fast Reply',
+        items: [
+          {
+            title: 'Direct WhatsApp Chat',
+            desc: 'Instant 1-on-1 message on WhatsApp',
+            url: 'https://wa.me/966500000000',
+            tone: 'blue'
+          },
+          {
+            title: 'WhatsApp Official Channel',
+            desc: 'Latest app releases & UI updates',
+            url: 'https://whatsapp.com/channel/openworldxbd',
+            tone: 'amber'
+          }
+        ]
+      },
+      messenger: {
+        title: 'Messenger Connect',
+        badge: 'Facebook',
+        items: [
+          {
+            title: 'Direct Messenger Inbox',
+            desc: 'Chat directly via Facebook Messenger',
+            url: 'https://m.me/openworldxbd',
+            tone: 'blue'
+          },
+          {
+            title: 'Official Facebook Page',
+            desc: 'Follow Openworldxbd community posts',
+            url: 'https://facebook.com/openworldxbd',
+            tone: 'amber'
+          }
+        ]
+      },
+      telegram: {
+        title: 'Telegram Connect',
+        badge: 'Cloud Sync',
+        items: [
+          {
+            title: 'Direct Telegram DM',
+            desc: 'Message @openworldxbd on Telegram',
+            url: 'https://t.me/openworldxbd',
+            tone: 'blue'
+          },
+          {
+            title: 'Telegram Updates Channel',
+            desc: 'Download open-source builds & tools',
+            url: 'https://t.me/s/openworldxbd',
+            tone: 'amber'
+          }
+        ]
+      }
+    };
+
+    let currentTab = 'whatsapp';
+    let currentView = 'home';
+    let selectedPlatform = 'WhatsApp';
+
+    function renderDropdown(tabKey) {
+      const data = socialData[tabKey];
+      const container = document.getElementById('socialDropdownCard');
+      container.innerHTML = `
+        <div class="dropdown-header">
+          <span class="dropdown-title">${data.title}</span>
+          <span class="dropdown-badge">${data.badge}</span>
+        </div>
+        ${data.items.map(item => `
+          <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="popup-action-row">
+            <div class="action-left">
+              <div class="action-icon-box ${item.tone === 'amber' ? 'amber' : ''}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M7 17l9.2-9.2M17 17V7H7"></path>
+                </svg>
+              </div>
+              <div class="action-info">
+                <h4>${item.title}</h4>
+                <p>${item.desc}</p>
+              </div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.6;">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+        `).join('')}
+      `;
+    }
+
+    function selectSocialTab(tabKey) {
+      currentTab = tabKey;
+      ['messenger', 'whatsapp', 'telegram'].forEach(key => {
+        const btn = document.getElementById('tab-' + key);
+        if (key === tabKey) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      renderDropdown(tabKey);
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      document.getElementById('themeIconSun').style.display = isDark ? 'block' : 'none';
+      document.getElementById('themeIconMoon').style.display = isDark ? 'none' : 'block';
+    }
+
+    function switchView(target) {
+      currentView = target;
+      const homeEl = document.getElementById('homeView');
+      const contactEl = document.getElementById('contactView');
+      const chatIcon = document.getElementById('supportIconChat');
+      const backIcon = document.getElementById('supportIconBack');
+
+      if (target === 'contact') {
+        homeEl.classList.remove('active');
+        contactEl.classList.add('active', 'zoom-center-in');
+        chatIcon.style.display = 'none';
+        backIcon.style.display = 'block';
+      } else {
+        contactEl.classList.remove('active', 'zoom-center-in');
+        homeEl.classList.add('active');
+        chatIcon.style.display = 'block';
+        backIcon.style.display = 'none';
+      }
+    }
+
+    function toggleContactView() {
+      switchView(currentView === 'home' ? 'contact' : 'home');
+    }
+
+    function togglePlatformMenu() {
+      const menu = document.getElementById('platformMenu');
+      const trigger = document.getElementById('platformTrigger');
+      menu.classList.toggle('open');
+      trigger.classList.toggle('open');
+    }
+
+    function choosePlatform(name, el) {
+      selectedPlatform = name;
+      document.getElementById('selectedPlatformText').textContent = name;
+      document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
+      el.classList.add('selected');
+      togglePlatformMenu();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastBanner');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    function handleContactSubmit() {
+      const name = document.getElementById('senderName').value.trim();
+      const message = document.getElementById('senderMessage').value.trim();
+      if (!message) {
+        showToast('Please enter a message first');
+        return;
+      }
+      const text = encodeURIComponent(`Hi Openworldxbd${name ? ' (' + name + ')' : ''}, ${message}`);
+      let url = `https://wa.me/966500000000?text=${text}`;
+      if (selectedPlatform === 'Telegram') url = `https://t.me/openworldxbd`;
+      if (selectedPlatform === 'Messenger') url = `https://m.me/openworldxbd`;
+      if (selectedPlatform === 'Email') url = `mailto:contact@openworldxbd.com?subject=Inquiry&body=${text}`;
+
+      showToast(`Opening ${selectedPlatform}...`);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    // Initialize Default WhatsApp Tab & Dropdown Open
+    selectSocialTab('whatsapp');
+  </script>
+</body>
+</html>
