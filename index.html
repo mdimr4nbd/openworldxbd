@@ -1,985 +1,1350 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Openworldxbd — Digital Portfolio &amp; Connect</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-base: #f8fafc;
-      --surface-card: rgba(255, 255, 255, 0.88);
-      --surface-elevated: rgba(241, 245, 249, 0.92);
-      --border-subtle: rgba(15, 23, 42, 0.08);
-      --border-highlight: rgba(59, 130, 246, 0.25);
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #64748b;
-      --accent-blue: #2563eb;
-      --accent-amber: #d97706;
-      --accent-violet: #7c3aed;
-      --shadow-card: 0 12px 32px -8px rgba(15, 23, 42, 0.08);
-      --mesh-bg:
-        radial-gradient(circle at 20% 15%, rgba(59, 130, 246, 0.14), transparent 48%),
-        radial-gradient(circle at 82% 22%, rgba(245, 158, 11, 0.12), transparent 46%),
-        radial-gradient(circle at 50% 85%, rgba(124, 58, 237, 0.10), transparent 52%),
-        #f8fafc;
-    }
-
-    html.dark {
-      color-scheme: dark;
-      --bg-base: #05070c;
-      --surface-card: rgba(13, 18, 30, 0.76);
-      --surface-elevated: rgba(20, 27, 45, 0.85);
-      --border-subtle: rgba(255, 255, 255, 0.09);
-      --border-highlight: rgba(96, 165, 250, 0.35);
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --accent-blue: #38bdf8;
-      --accent-amber: #fbbf24;
-      --accent-violet: #a78bfa;
-      --shadow-card: 0 20px 44px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      --mesh-bg:
-        radial-gradient(circle at 18% 14%, rgba(37, 99, 235, 0.28), transparent 46%),
-        radial-gradient(circle at 85% 24%, rgba(245, 158, 11, 0.20), transparent 45%),
-        radial-gradient(circle at 48% 82%, rgba(109, 40, 217, 0.22), transparent 52%),
-        #05070c;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--mesh-bg);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
-    }
-
-    /* Top Glass Navbar */
-    .top-nav {
-      position: sticky;
-      top: 12px;
-      z-index: 40;
-      width: calc(100% - 28px);
-      max-width: 440px;
-      height: 54px;
-      padding: 0 14px;
-      border-radius: 999px;
-      background: var(--surface-card);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-card);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .brand-cluster {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .avatar-ring-wrap {
-      position: relative;
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .avatar-pulse {
-      position: absolute;
-      inset: -3px;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, #38bdf8, #fbbf24, #a78bfa, #38bdf8);
-      opacity: 0.55;
-      filter: blur(4px);
-      animation: pulseGlow 3.2s ease-in-out infinite;
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(0.95); opacity: 0.45; }
-      50% { transform: scale(1.12); opacity: 0.85; }
-    }
-
-    .bd-logo-circle {
-      position: relative;
-      z-index: 2;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #006a4e 0%, #004d38 100%);
-      border: 1.5px solid rgba(255, 255, 255, 0.28);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-    }
-
-    .brand-title-nav {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-    }
-
-    .theme-toggle-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1px solid var(--border-subtle);
-      background: var(--surface-elevated);
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .theme-toggle-btn:active {
-      transform: scale(0.92);
-    }
-
-    /* Main Container */
-    .app-shell {
-      width: 100%;
-      max-width: 440px;
-      padding: 20px 16px 96px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* View Transitions */
-    .view-section {
-      display: none;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .view-section.active {
-      display: flex;
-    }
-
-    .view-section.zoom-center-in {
-      animation: zoomFromCenter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      transform-origin: center center;
-    }
-
-    @keyframes zoomFromCenter {
-      0% { opacity: 0; transform: scale(0.88); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    /* Hero Card */
-    .hero-card {
-      background: var(--surface-card);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 24px;
-      padding: 24px 20px;
-      box-shadow: var(--shadow-card);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border-subtle);
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--accent-blue);
-      margin-bottom: 14px;
-    }
-
-    .hero-name {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 48%, #fbbf24 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }
-
-    html:not(.dark) .hero-name {
-      background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 52%, #d97706 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-bio {
-      font-size: 13.5px;
-      line-height: 1.55;
-      color: var(--text-secondary);
-      max-width: 330px;
-      margin: 0 auto 20px;
-    }
-
-    /* Metrics Row */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .metric-box {
-      background: var(--surface-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 12px 8px;
-      text-align: center;
-    }
-
-    .metric-val {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 2px;
-    }
-
-    .metric-val.blue { color: var(--accent-blue); }
-    .metric-val.amber { color: var(--accent-amber); }
-    .metric-val.violet { color: var(--accent-violet); }
-
-    .metric-lbl {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
-
-    /* Segmented 3-Tab Row */
-    .segmented-tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .seg-tab-btn {
-      background: var(--surface-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 12px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      color: var(--text-secondary);
-      font-family: 'Inter', sans-serif;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: var(--shadow-card);
-    }
-
-    .seg-tab-btn svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .seg-tab-btn.active {
-      color: var(--text-primary);
-      border-color: var(--border-highlight);
-      background: linear-gradient(145deg, rgba(56, 189, 248, 0.16), rgba(251, 191, 36, 0.12));
-    }
-
-    html:not(.dark) .seg-tab-btn.active {
-      background: linear-gradient(145deg, rgba(37, 99, 235, 0.10), rgba(217, 119, 6, 0.08));
-      border-color: rgba(37, 99, 235, 0.35);
-    }
-
-    /* Dropdown Popup Card */
-    .tab-dropdown-card {
-      background: var(--surface-card);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 22px;
-      padding: 16px;
-      box-shadow: var(--shadow-card);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .dropdown-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 4px 4px;
-    }
-
-    .dropdown-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13.5px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .dropdown-badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.14);
-      color: var(--accent-blue);
-    }
-
-    .popup-action-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 13px 14px;
-      border-radius: 15px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border-subtle);
-      text-decoration: none;
-      color: var(--text-primary);
-    }
-
-    .popup-action-row:active {
-      transform: scale(0.985);
-    }
-
-    .action-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .action-icon-box {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(56, 189, 248, 0.14);
-      color: var(--accent-blue);
-      flex-shrink: 0;
-    }
-
-    .action-icon-box.amber {
-      background: rgba(251, 191, 36, 0.14);
-      color: var(--accent-amber);
-    }
-
-    .action-info h4 {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 2px;
-    }
-
-    .action-info p {
-      font-size: 11.5px;
-      color: var(--text-secondary);
-    }
-
-    /* Contact View */
-    .contact-card {
-      background: var(--surface-card);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 24px;
-      padding: 22px 18px;
-      box-shadow: var(--shadow-card);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .contact-header h2 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 20px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #38bdf8, #fbbf24);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 4px;
-    }
-
-    html:not(.dark) .contact-header h2 {
-      background: linear-gradient(135deg, #1d4ed8, #d97706);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .contact-header p {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      position: relative;
-    }
-
-    .form-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .form-input,
-    .form-textarea,
-    .custom-select-trigger {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border-subtle);
-      background: var(--surface-elevated);
-      color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
-      font-size: 13.5px;
-      outline: none;
-    }
-
-    .form-input:focus,
-    .form-textarea:focus,
-    .custom-select-trigger.open {
-      border-color: var(--accent-blue);
-    }
-
-    .form-textarea {
-      min-height: 92px;
-      resize: none;
-    }
-
-    /* Custom Multi-Color Theme Select Popup */
-    .custom-select-trigger {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .custom-select-menu {
-      display: none;
-      flex-direction: column;
-      margin-top: 6px;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border-highlight);
-      background:
-        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.22), transparent 55%),
-        radial-gradient(circle at 85% 80%, rgba(251, 191, 36, 0.18), transparent 55%),
-        #0c1220;
-      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.55);
-    }
-
-    html:not(.dark) .custom-select-menu {
-      background:
-        radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.14), transparent 55%),
-        radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.12), transparent 55%),
-        #ffffff;
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.14);
-    }
-
-    .custom-select-menu.open {
-      display: flex;
-    }
-
-    .custom-option {
-      padding: 13px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
-      border-bottom: 1px solid var(--border-subtle);
-      cursor: pointer;
-    }
-
-    .custom-option:last-child {
-      border-bottom: none;
-    }
-
-    .radio-dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .custom-option.selected .radio-dot {
-      border-color: #38bdf8;
-    }
-
-    .custom-option.selected .radio-dot::after {
-      content: '';
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #38bdf8, #fbbf24);
-    }
-
-    .submit-btn {
-      margin-top: 4px;
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 52%, #d97706 100%);
-      color: #ffffff;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
-    }
-
-    .submit-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* Floating Circular Support Button with Ambient Glow */
-    .floating-support-wrap {
-      position: fixed;
-      right: 20px;
-      bottom: 22px;
-      z-index: 50;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .support-pulse-ring {
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: conic-gradient(from 45deg, #38bdf8, #fbbf24, #a78bfa, #38bdf8);
-      opacity: 0.6;
-      filter: blur(5px);
-      animation: pulseGlow 3.2s ease-in-out infinite;
-    }
-
-    .floating-support-btn {
-      position: relative;
-      z-index: 2;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 60%, #78350f 100%);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
-    }
-
-    .floating-support-btn:active {
-      transform: scale(0.92);
-    }
-
-    /* Toast Notification */
-    .toast-banner {
-      position: fixed;
-      bottom: 84px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--surface-card);
-      border: 1px solid var(--border-highlight);
-      color: var(--text-primary);
-      padding: 10px 16px;
-      border-radius: 999px;
-      font-size: 12.5px;
-      font-weight: 600;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 60;
-      box-shadow: var(--shadow-card);
-    }
-
-    .toast-banner.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OPENWORLDXBD — Official Bio & Developer Hub</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans, Rubik Wet Paint & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS & JSZip for One-Click Multi-File ZIP Export -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style id="mainStylesheet">
+        /* ==========================================================================
+           1. THEME VARIABLES (DARK & LIGHT - UI UX PRO MAX BLUE & AMBER MULTICOLOR)
+           ========================================================================== */
+        :root {
+            --bg-primary: #070b14;
+            --bg-gradient: radial-gradient(circle at 38% 36%, rgba(37, 99, 235, 0.24) 0%, transparent 48%),
+                           radial-gradient(circle at 82% 45%, rgba(234, 88, 12, 0.22) 0%, transparent 46%),
+                           radial-gradient(circle at 22% 85%, rgba(59, 130, 246, 0.16) 0%, transparent 45%),
+                           linear-gradient(180deg, #070b14 0%, #090e1a 55%, #060911 100%);
+            --card-bg: rgba(17, 24, 39, 0.72);
+            --card-border: rgba(148, 163, 184, 0.16);
+            --card-hover-border: rgba(249, 115, 22, 0.45);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-indigo: #6366f1;
+            --accent-pink: #f97316;
+            --accent-emerald: #10b981;
+            --multi-gradient: linear-gradient(90deg, #3b82f6 0%, #60a5fa 45%, #fb923c 75%, #f97316 100%);
+            --pill-bg: rgba(30, 41, 59, 0.75);
+            --pill-active-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(249, 115, 22, 0.22));
+            --code-bg: #080d1a;
+            --shadow-glow: 0 12px 32px -8px rgba(15, 23, 42, 0.6);
+        }
+
+        html.light-theme {
+            --bg-primary: #f4f6fb;
+            --bg-gradient: radial-gradient(circle at 35% 30%, rgba(59, 130, 246, 0.16) 0%, transparent 48%),
+                           radial-gradient(circle at 82% 45%, rgba(249, 115, 22, 0.15) 0%, transparent 46%),
+                           linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --card-border: rgba(148, 163, 184, 0.25);
+            --card-hover-border: rgba(59, 130, 246, 0.45);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --accent-blue: #2563eb;
+            --accent-indigo: #4f46e5;
+            --accent-pink: #ea580c;
+            --accent-emerald: #059669;
+            --multi-gradient: linear-gradient(90deg, #2563eb 0%, #3b82f6 45%, #f97316 80%, #ea580c 100%);
+            --pill-bg: rgba(241, 245, 249, 0.95);
+            --pill-active-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(249, 115, 22, 0.14));
+            --code-bg: #ffffff;
+            --shadow-glow: 0 12px 30px -8px rgba(15, 23, 42, 0.08);
+        }
+
+        /* ==========================================================================
+           2. BASE & ZERO-FLICKER LAYOUT
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            min-height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            background-image: var(--bg-gradient);
+            color: var(--text-primary);
+        }
+
+        #starfieldCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-shell {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 64px 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* ==========================================================================
+           3. KEYFRAME ANIMATIONS (ORBIT, WAVE FLOAT, MOTION BLUR, CODE SCROLL)
+           ========================================================================== */
+        @keyframes orbitSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes orbitSpinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes waveFloatBox {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes iconHoverBob {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-2.5px) scale(1.06); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.85); }
+        }
+
+        @keyframes liveCircleFlyOut {
+            0% {
+                transform: scale(1);
+                opacity: 0.85;
+            }
+            100% {
+                transform: scale(2.3);
+                opacity: 0;
+            }
+        }
+
+        @keyframes smoothMotionEntrance {
+            0% {
+                opacity: 0;
+                filter: blur(8px);
+                transform: translateY(14px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: translateY(0px) scale(1);
+            }
+        }
+
+        @keyframes motionBlurPanel {
+            0% {
+                opacity: 0;
+                filter: blur(7px);
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes codeMotionScroll {
+            0% { transform: translateY(0%); }
+            100% { transform: translateY(-50%); }
+        }
+
+        /* ==========================================================================
+           4. FIXED ALWAYS-VISIBLE TOP NAVIGATION BAR (FLUSH TOP)
+           ========================================================================== */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            z-index: 50;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            border-radius: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-top: none;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .brand-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-logo-orbit {
+            position: relative;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .top-logo-orbit::before {
+            content: '';
+            position: absolute;
+            inset: -2.5px;
+            border-radius: 50%;
+            border: 1.5px dashed #fb923c;
+            animation: orbitSpin 10s linear infinite;
+            pointer-events: none;
+        }
+
+        .brand-logo-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--multi-gradient);
+            padding: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-logo-circle img,
+        .brand-logo-circle svg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background: #e2e8f0;
+        }
+
+        .brand-title-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .brand-name {
+            font-family: 'Rubik Wet Paint', cursive, sans-serif;
+            font-size: 13.5px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            background: var(--multi-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-name .bd-small,
+        .hero-name .bd-small {
+            font-size: 0.88em;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--card-border);
+            background: var(--pill-bg);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* ==========================================================================
+           5. HERO PROFILE CARD (86PX AVATAR + ROTATING RING LINE + TYPING)
+           ========================================================================== */
+        .hero-card {
+            background: var(--card-bg);
+            border: 1px solid transparent;
+            border-radius: 26px;
+            padding: 26px 20px 22px;
+            text-align: center;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+            animation: smoothMotionEntrance 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        /* মেইন বড় বক্সের চারপাশ দিয়ে ঘূর্ণায়মান রিং লাইন */
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 170%;
+            height: 220%;
+            margin-top: -110%;
+            margin-left: -85%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                transparent 18%,
+                #3b82f6 32%,
+                #60a5fa 44%,
+                transparent 54%,
+                transparent 68%,
+                #fb923c 82%,
+                #f97316 94%,
+                transparent 100%
+            );
+            animation: orbitSpin 5.5s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            inset: 1.5px;
+            border-radius: 24.5px;
+            background: var(--bg-primary);
+            background-image: var(--bg-gradient);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 86px;
+            height: 86px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-dotted-ring {
+            position: absolute;
+            inset: -7px;
+            border-radius: 50%;
+            padding: 2.5px;
+            background: conic-gradient(
+                from 0deg,
+                #3b82f6 0%,
+                #60a5fa 25%,
+                transparent 42%,
+                transparent 55%,
+                #fb923c 75%,
+                #f97316 95%,
+                #3b82f6 100%
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: orbitSpin 3.2s linear infinite;
+            pointer-events: none;
+        }
+
+        .avatar-dotted-ring-inner {
+            position: absolute;
+            inset: -3.5px;
+            border-radius: 50%;
+            border: 1.5px dashed rgba(96, 165, 250, 0.65);
+            animation: orbitSpinReverse 12s linear infinite;
+            pointer-events: none;
+        }
+
+        .avatar-circle {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            overflow: hidden;
+            padding: 2.5px;
+            background: var(--multi-gradient);
+            box-shadow: 0 8px 26px rgba(59, 130, 246, 0.28);
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-circle img,
+        .avatar-circle svg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background: #e2e8f0;
+        }
+
+        .hero-name {
+            font-family: 'Rubik Wet Paint', cursive, sans-serif;
+            font-size: 25px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            line-height: 1.25;
+            background: var(--multi-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .hero-verified-badge {
+            width: 19px;
+            height: 19px;
+            color: #38bdf8;
+            flex-shrink: 0;
+        }
+
+        .hero-owxbd-tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.35em;
+            padding-left: 0.35em;
+            margin-bottom: 6px;
+            color: var(--accent-blue);
+            opacity: 0.9;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ==========================================================================
+           6. LIVELY MESSAGING TABS (MESSENGER / WHATSAPP / TELEGRAM)
+           ========================================================================== */
+        .tabs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 0 12px;
+        }
+
+        .tab-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 9px 10px;
+            border-radius: 14px;
+            background: var(--card-bg);
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-glow);
+            animation: waveFloatBox 3.4s ease-in-out infinite;
+        }
+
+        /* Messenger, WhatsApp ও Telegram ছোট ট্যাব বক্সের বর্ডারের চারপাশ দিয়ে ঘূর্ণায়মান স্পষ্ট রিং লাইন */
+        .tab-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 320px;
+            height: 320px;
+            margin-top: -160px;
+            margin-left: -160px;
+            animation: orbitSpin 3.2s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .tab-box:nth-child(1)::before {
+            background: conic-gradient(from 0deg, transparent 0%, transparent 18%, #0084FF 38%, #60a5fa 50%, transparent 65%, transparent 100%);
+        }
+
+        .tab-box:nth-child(2)::before {
+            background: conic-gradient(from 0deg, transparent 0%, transparent 18%, #25D366 38%, #4ade80 50%, transparent 65%, transparent 100%);
+            animation-delay: -1.1s;
+        }
+
+        .tab-box:nth-child(3)::before {
+            background: conic-gradient(from 0deg, transparent 0%, transparent 18%, #26A5E4 38%, #38bdf8 50%, transparent 65%, transparent 100%);
+            animation-delay: -2.2s;
+        }
+
+        .tab-box::after {
+            content: '';
+            position: absolute;
+            inset: 0.75px;
+            border-radius: 13.25px;
+            background: #131c31;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        html.light-theme .tab-box::after {
+            background: #ffffff;
+        }
+
+        .tab-box.active::after {
+            background: linear-gradient(135deg, #1b2847, #272235);
+        }
+
+        html.light-theme .tab-box.active::after {
+            background: linear-gradient(135deg, #eff6ff, #fff7ed);
+        }
+
+        .tab-box > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-box:nth-child(1) { animation-delay: 0s; }
+        .tab-box:nth-child(2) { animation-delay: 0.45s; }
+        .tab-box:nth-child(3) { animation-delay: 0.9s; }
+
+        .tab-box.active {
+            color: var(--text-primary);
+            box-shadow: 0 6px 22px -4px rgba(59, 130, 246, 0.28);
+        }
+
+        .tab-box-icon {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+            animation: iconHoverBob 2.6s ease-in-out infinite;
+        }
+
+        .tab-panel-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            animation: motionBlurPanel 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .panel-platform {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-icon-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            animation: iconHoverBob 2.8s ease-in-out infinite;
+        }
+
+        .fast-reply-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.14);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #10b981;
+            font-size: 10.5px;
+            font-weight: 700;
+        }
+
+        .fast-reply-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulseGlow 1.8s infinite;
+        }
+
+        .panel-cta-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 11px 16px;
+            border-radius: 13px;
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 6px 18px -4px rgba(56, 189, 248, 0.4);
+        }
+
+        .panel-cta-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ==========================================================================
+           7. DIRECT CONNECT LINK CARDS (WAVE FLOAT ANIMATION)
+           ========================================================================== */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: var(--text-muted);
+            padding-left: 4px;
+            margin-bottom: -6px;
+        }
+
+        .links-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-radius: 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            text-decoration: none;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-glow);
+            animation: waveFloatBox 3.8s ease-in-out infinite;
+        }
+
+        .link-card:nth-child(1) { animation-delay: 0.2s; }
+        .link-card:nth-child(2) { animation-delay: 0.7s; }
+        .link-card:nth-child(3) { animation-delay: 1.2s; }
+
+        .link-card:hover {
+            border-color: var(--card-hover-border);
+        }
+
+        .link-card-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .link-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            animation: iconHoverBob 2.8s ease-in-out infinite;
+        }
+
+        .link-arrow-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--pill-bg);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        /* ==========================================================================
+           8. LIVE ANIMATED CODE SHOWCASE WINDOW
+           ========================================================================== */
+        .code-window-card {
+            background: var(--code-bg);
+            border: 1px solid rgba(59, 130, 246, 0.32);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 14px 34px rgba(37, 99, 235, 0.24);
+            animation: waveFloatBox 4.4s ease-in-out infinite;
+        }
+
+        .code-window-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+        }
+
+        .window-dots {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .win-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .code-filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .live-status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            padding: 4px;
+            position: relative;
+        }
+
+        .live-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.85);
+            position: relative;
+            display: block;
+        }
+
+        .live-status-dot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px solid #10b981;
+            background: rgba(16, 185, 129, 0.35);
+            animation: liveCircleFlyOut 1.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            pointer-events: none;
+        }
+
+        .code-viewport {
+            height: 148px;
+            overflow: hidden;
+            position: relative;
+            padding: 10px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            line-height: 1.65;
+            color: #e2e8f0;
+        }
+
+        .code-viewport::before,
+        .code-viewport::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 22px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .code-viewport::before {
+            top: 0;
+            background: linear-gradient(to bottom, #080d1a, transparent);
+        }
+
+        .code-viewport::after {
+            bottom: 0;
+            background: linear-gradient(to top, #080d1a, transparent);
+        }
+
+        html.light-theme .code-window-card {
+            background: #ffffff;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
+        }
+
+        html.light-theme .code-window-header {
+            background: #f8fafc;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        html.light-theme .code-filename {
+            color: #475569;
+        }
+
+        html.light-theme .code-viewport {
+            color: #1e293b;
+        }
+
+        html.light-theme .code-viewport::before {
+            background: linear-gradient(to bottom, #ffffff, transparent);
+        }
+
+        html.light-theme .code-viewport::after {
+            background: linear-gradient(to top, #ffffff, transparent);
+        }
+
+        html.light-theme .line-num {
+            color: #94a3b8;
+        }
+
+        html.light-theme .tok-kw { color: #7c3aed; }
+        html.light-theme .tok-var { color: #0284c7; }
+        html.light-theme .tok-prop { color: #2563eb; }
+        html.light-theme .tok-str { color: #16a34a; }
+        html.light-theme .tok-bool { color: #ea580c; }
+
+        .code-scroll-track {
+            display: flex;
+            flex-direction: column;
+            animation: codeMotionScroll 14s linear infinite;
+            will-change: transform;
+        }
+
+        .code-line {
+            display: flex;
+            gap: 12px;
+            white-space: pre;
+        }
+
+        .line-num {
+            color: #475569;
+            user-select: none;
+            min-width: 18px;
+            text-align: right;
+        }
+
+        .tok-kw { color: #c084fc; }
+        .tok-var { color: #38bdf8; }
+        .tok-prop { color: #93c5fd; }
+        .tok-str { color: #4ade80; }
+        .tok-bool { color: #fb923c; }
+
+        /* ==========================================================================
+           9. NON-FIXED BOTTOM COPYRIGHT FOOTER
+           ========================================================================== */
+        .footer-note {
+            width: 100%;
+            margin-top: 4px;
+            text-align: center;
+            font-family: 'Rubik Wet Paint', cursive, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            padding: 7px 16px 8px;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <header class="top-nav">
-    <div class="brand-cluster" onclick="switchView('home')">
-      <div class="avatar-ring-wrap">
-        <div class="avatar-pulse"></div>
-        <div class="bd-logo-circle" aria-label="BD Emblem">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <circle cx="11" cy="12" r="6" fill="#f42a41" />
-            <text x="12" y="15.5" text-anchor="middle" fill="#ffffff" font-family="Plus Jakarta Sans, sans-serif" font-weight="800" font-size="8.5">BD</text>
-          </svg>
-        </div>
-      </div>
-      <span class="brand-title-nav">Openworldxbd</span>
-    </div>
+    <!-- Falling Stars Particle Background -->
+    <canvas id="starfieldCanvas"></canvas>
 
-    <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" onclick="toggleTheme()">
-      <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"></circle>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-      </svg>
-      <svg id="themeIconMoon" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-      </svg>
-    </button>
-  </header>
-
-  <main class="app-shell">
-    <!-- HOME VIEW -->
-    <section id="homeView" class="view-section active">
-      <div class="hero-card">
-        <div class="hero-badge">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-          Verified Digital Creator
-        </div>
-        <h1 class="hero-name">Openworldxbd</h1>
-        <p class="hero-bio">
-          Building ultra-lightweight mobile web apps, modern UI/UX interfaces, and open-source digital tools engineered for instant speed.
-        </p>
-
-        <div class="metrics-grid">
-          <div class="metric-box">
-            <div class="metric-val blue">0ms</div>
-            <div class="metric-lbl">Zero Lag UI</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-val amber">100%</div>
-            <div class="metric-lbl">Mobile First</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-val violet">KSA</div>
-            <div class="metric-lbl">Global Hub</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Segmented 3 Separate Buttons -->
-      <div class="segmented-tabs" role="tablist">
-        <button class="seg-tab-btn" id="tab-messenger" onclick="selectSocialTab('messenger')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-          </svg>
-          Messenger
-        </button>
-
-        <button class="seg-tab-btn active" id="tab-whatsapp" onclick="selectSocialTab('whatsapp')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-          WhatsApp
-        </button>
-
-        <button class="seg-tab-btn" id="tab-telegram" onclick="selectSocialTab('telegram')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
-          Telegram
-        </button>
-      </div>
-
-      <!-- Popup Dropdown Area (WhatsApp Open by Default) -->
-      <div class="tab-dropdown-card" id="socialDropdownCard"></div>
-    </section>
-
-    <!-- CONTACT VIEW -->
-    <section id="contactView" class="view-section">
-      <div class="contact-card">
-        <div class="contact-header">
-          <h2>Contact Openworldxbd</h2>
-          <p>Send a direct inquiry for custom apps, lightweight web tools, or collaborations.</p>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="senderName">Your Name</label>
-          <input class="form-input" id="senderName" type="text" placeholder="Enter your name" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Preferred Platform</label>
-          <div class="custom-select-trigger" id="platformTrigger" onclick="togglePlatformMenu()">
-            <span id="selectedPlatformText">WhatsApp</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </div>
-
-          <div class="custom-select-menu" id="platformMenu">
-            <div class="custom-option selected" onclick="choosePlatform('WhatsApp', this)">
-              <span>WhatsApp</span>
-              <span class="radio-dot"></span>
+    <main class="app-shell">
+        <!-- Sticky Top Navigation Bar -->
+        <header class="top-navbar">
+            <div class="brand-left">
+                <div class="top-logo-orbit">
+                    <div class="brand-logo-circle">
+                        <img src="20175_2.png" alt="OPENWORLDXBD Logo" onerror="renderPortraitFallback(this)">
+                    </div>
+                </div>
+                <div class="brand-title-group">
+                    <span class="brand-name">OPENWORLDX<span class="bd-small">BD</span></span>
+                </div>
             </div>
-            <div class="custom-option" onclick="choosePlatform('Messenger', this)">
-              <span>Messenger</span>
-              <span class="radio-dot"></span>
+
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Switch Theme" title="Toggle Dark/Light Theme">
+                    <svg id="sunIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg id="moonIcon" class="hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="custom-option" onclick="choosePlatform('Telegram', this)">
-              <span>Telegram</span>
-              <span class="radio-dot"></span>
+        </header>
+
+        <!-- Hero Profile Card -->
+        <section class="hero-card">
+            <div class="avatar-wrapper">
+                <div class="avatar-dotted-ring"></div>
+                <div class="avatar-dotted-ring-inner"></div>
+                <div class="avatar-circle">
+                    <img src="20175_2.png" alt="OPENWORLDXBD Portrait" onerror="renderPortraitFallback(this)">
+                </div>
             </div>
-            <div class="custom-option" onclick="choosePlatform('Email', this)">
-              <span>Email</span>
-              <span class="radio-dot"></span>
-            </div>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-label" for="senderMessage">Message</label>
-          <textarea class="form-textarea" id="senderMessage" placeholder="Write your message here..."></textarea>
-        </div>
-
-        <button class="submit-btn" onclick="handleContactSubmit()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
-          Send Message
-        </button>
-      </div>
-    </section>
-  </main>
-
-  <!-- Floating Circular Support Button -->
-  <div class="floating-support-wrap">
-    <div class="support-pulse-ring"></div>
-    <button class="floating-support-btn" id="supportFloatingBtn" aria-label="Support &amp; Contact" onclick="toggleContactView()">
-      <svg id="supportIconChat" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-      </svg>
-      <svg id="supportIconBack" style="display:none;" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-    </button>
-  </div>
-
-  <div class="toast-banner" id="toastBanner">Message prepared!</div>
-
-  <script>
-    const socialData = {
-      whatsapp: {
-        title: 'WhatsApp Connect',
-        badge: 'Fast Reply',
-        items: [
-          {
-            title: 'Direct WhatsApp Chat',
-            desc: 'Instant 1-on-1 message on WhatsApp',
-            url: 'https://wa.me/966500000000',
-            tone: 'blue'
-          },
-          {
-            title: 'WhatsApp Official Channel',
-            desc: 'Latest app releases & UI updates',
-            url: 'https://whatsapp.com/channel/openworldxbd',
-            tone: 'amber'
-          }
-        ]
-      },
-      messenger: {
-        title: 'Messenger Connect',
-        badge: 'Facebook',
-        items: [
-          {
-            title: 'Direct Messenger Inbox',
-            desc: 'Chat directly via Facebook Messenger',
-            url: 'https://m.me/openworldxbd',
-            tone: 'blue'
-          },
-          {
-            title: 'Official Facebook Page',
-            desc: 'Follow Openworldxbd community posts',
-            url: 'https://facebook.com/openworldxbd',
-            tone: 'amber'
-          }
-        ]
-      },
-      telegram: {
-        title: 'Telegram Connect',
-        badge: 'Cloud Sync',
-        items: [
-          {
-            title: 'Direct Telegram DM',
-            desc: 'Message @openworldxbd on Telegram',
-            url: 'https://t.me/openworldxbd',
-            tone: 'blue'
-          },
-          {
-            title: 'Telegram Updates Channel',
-            desc: 'Download open-source builds & tools',
-            url: 'https://t.me/s/openworldxbd',
-            tone: 'amber'
-          }
-        ]
-      }
-    };
-
-    let currentTab = 'whatsapp';
-    let currentView = 'home';
-    let selectedPlatform = 'WhatsApp';
-
-    function renderDropdown(tabKey) {
-      const data = socialData[tabKey];
-      const container = document.getElementById('socialDropdownCard');
-      container.innerHTML = `
-        <div class="dropdown-header">
-          <span class="dropdown-title">${data.title}</span>
-          <span class="dropdown-badge">${data.badge}</span>
-        </div>
-        ${data.items.map(item => `
-          <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="popup-action-row">
-            <div class="action-left">
-              <div class="action-icon-box ${item.tone === 'amber' ? 'amber' : ''}">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                  <path d="M7 17l9.2-9.2M17 17V7H7"></path>
+            <div class="hero-title-row">
+                <h1 class="hero-name">OPENWORLDX<span class="bd-small">BD</span></h1>
+                <svg class="hero-verified-badge" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified">
+                    <path d="M12 2L14.8 4.2L18.4 3.9L19.6 7.3L22.6 9.3L21.5 12.8L22.6 16.3L19.6 18.3L18.4 21.7L14.8 21.4L12 23.6L9.2 21.4L5.6 21.7L4.4 18.3L1.4 16.3L2.5 12.8L1.4 9.3L4.4 7.3L5.6 3.9L9.2 4.2L12 2ZM10.4 16.2L17.1 9.5L15.7 8.1L10.4 13.4L8.3 11.3L6.9 12.7L10.4 16.2Z"/>
                 </svg>
-              </div>
-              <div class="action-info">
-                <h4>${item.title}</h4>
-                <p>${item.desc}</p>
-              </div>
             </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.6;">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </a>
-        `).join('')}
-      `;
-    }
+            <div class="hero-owxbd-tag">O W X B D</div>
+            <p class="hero-subtitle"><span id="typingText">Assalamualaikum</span></p>
+        </section>
 
-    function selectSocialTab(tabKey) {
-      currentTab = tabKey;
-      ['messenger', 'whatsapp', 'telegram'].forEach(key => {
-        const btn = document.getElementById('tab-' + key);
-        if (key === tabKey) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
+        <!-- Lively Messaging Tabs -->
+        <section aria-label="Direct Messaging Platforms">
+            <div class="tabs-grid" role="tablist">
+                <button class="tab-box active" role="tab" aria-selected="true" onclick="switchPlatform('messenger', this)">
+                    <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#0084FF">
+                        <path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/>
+                    </svg>
+                    <span>Messenger</span>
+                </button>
+
+                <button class="tab-box" role="tab" aria-selected="false" onclick="switchPlatform('whatsapp', this)">
+                    <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#25D366">
+                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.96 1.38-.51.08-1.15.11-1.85-.11-.43-.14-.98-.32-1.68-.62-2.95-1.27-4.88-4.24-5.03-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.47.12.65-.07.18-.2.74-.86.94-1.16.2-.3.39-.25.66-.15.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.13.07.72-.17 1.4z"/>
+                    </svg>
+                    <span>WhatsApp</span>
+                </button>
+
+                <button class="tab-box" role="tab" aria-selected="false" onclick="switchPlatform('telegram', this)">
+                    <svg class="tab-box-icon" viewBox="0 0 24 24" fill="#26A5E4">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                    </svg>
+                    <span>Telegram</span>
+                </button>
+            </div>
+
+            <!-- Active Platform Details Card -->
+            <div id="platformPanelCard" class="tab-panel-card mt-3">
+                <div class="panel-header">
+                    <div class="panel-platform">
+                        <div id="panelBadge" class="panel-icon-badge" style="background: linear-gradient(135deg, #0084FF, #00C6FF);">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 id="panelTitle" class="text-sm font-bold leading-tight">Facebook Messenger</h2>
+                            <p id="panelHandle" class="text-xs" style="color: var(--text-secondary);">@openworldxbd</p>
+                        </div>
+                    </div>
+                    <span class="fast-reply-badge">
+                        <span class="fast-reply-dot"></span>
+                        Fast Reply
+                    </span>
+                </div>
+                <p id="panelDesc" class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+                    Direct message for custom web apps, UI/UX design inquiries, automation bots, and instant project support.
+                </p>
+                <a id="panelCtaBtn" href="https://m.me/openworldxbd" target="_blank" rel="noopener noreferrer" class="panel-cta-btn" style="background: linear-gradient(135deg, #0084FF, #2563EB);">
+                    <span id="panelCtaText">Chat on Messenger</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Direct Connect Channels -->
+        <p class="section-label">Official Channels & Links</p>
+        <section class="links-stack">
+            <a href="https://t.me/openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
+                <div class="link-card-left">
+                    <div class="link-icon-box" style="background: rgba(38, 165, 228, 0.16); color: #26A5E4;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold">Join Telegram Channel</div>
+                        <div class="text-xs" style="color: var(--text-secondary);">@openworldxbd • Releases & Updates</div>
+                    </div>
+                </div>
+                <div class="link-arrow-circle">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="https://youtube.com/@openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
+                <div class="link-card-left">
+                    <div class="link-icon-box" style="background: rgba(239, 68, 68, 0.16); color: #ef4444;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold">YouTube Official</div>
+                        <div class="text-xs" style="color: var(--text-secondary);">Tutorials, Tech & Dev Showcases</div>
+                    </div>
+                </div>
+                <div class="link-arrow-circle">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="https://facebook.com/openworldxbd" target="_blank" rel="noopener noreferrer" class="link-card">
+                <div class="link-card-left">
+                    <div class="link-icon-box" style="background: rgba(59, 130, 246, 0.16); color: #3b82f6;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold">Facebook Page</div>
+                        <div class="text-xs" style="color: var(--text-secondary);">Community & Project Highlights</div>
+                    </div>
+                </div>
+                <div class="link-arrow-circle">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </div>
+            </a>
+        </section>
+
+        <!-- Live Animated Code Window Card -->
+        <section class="code-window-card" aria-label="Developer Live Code Preview">
+            <div class="code-window-header">
+                <div class="window-dots">
+                    <span class="win-dot" style="background: #ef4444;"></span>
+                    <span class="win-dot" style="background: #f59e0b;"></span>
+                    <span class="win-dot" style="background: #10b981;"></span>
+                </div>
+                <span class="live-status-pill" aria-label="Live">
+                    <span class="live-status-dot"></span>
+                </span>
+            </div>
+
+            <div class="code-viewport">
+                <div class="code-scroll-track">
+                    <div class="code-line"><span class="line-num">1</span><span><span class="tok-kw">const</span> <span class="tok-var">dev</span> = {</span></div>
+                    <div class="code-line"><span class="line-num">2</span><span>  <span class="tok-prop">brand</span>: <span class="tok-str">"OPENWORLDXBD"</span>,</span></div>
+                    <div class="code-line"><span class="line-num">3</span><span>  <span class="tok-prop">greeting</span>: <span class="tok-str">"Assalamualaikum"</span>,</span></div>
+                    <div class="code-line"><span class="line-num">4</span><span>  <span class="tok-prop">builds</span>: [<span class="tok-str">"Web"</span>, <span class="tok-str">"APK"</span>, <span class="tok-str">"Bot"</span>, <span class="tok-str">"API"</span>],</span></div>
+                    <div class="code-line"><span class="line-num">5</span><span>  <span class="tok-prop">uiSystem</span>: <span class="tok-str">"UI UX Pro Max"</span>,</span></div>
+                    <div class="code-line"><span class="line-num">6</span><span>  <span class="tok-prop">available</span>: <span class="tok-bool">true</span></span></div>
+                    <div class="code-line"><span class="line-num">7</span><span>};</span></div>
+                    <div class="code-line"><span class="line-num">8</span><span><span class="tok-var">dev</span>.<span class="tok-prop">launch</span>();</span></div>
+                    <!-- Duplicate set for seamless infinite loop -->
+                    <div class="code-line"><span class="line-num">1</span><span><span class="tok-kw">const</span> <span class="tok-var">dev</span> = {</span></div>
+                    <div class="code-line"><span class="line-num">2</span><span>  <span class="tok-prop">brand</span>: <span class="tok-str">"OPENWORLDXBD"</span>,</span></div>
+                    <div class="code-line"><span class="line-num">3</span><span>  <span class="tok-prop">greeting</span>: <span class="tok-str">"Assalamualaikum"</span>,</span></div>
+                    <div class="code-line"><span class="line-num">4</span><span>  <span class="tok-prop">builds</span>: [<span class="tok-str">"Web"</span>, <span class="tok-str">"APK"</span>, <span class="tok-str">"Bot"</span>, <span class="tok-str">"API"</span>],</span></div>
+                    <div class="code-line"><span class="line-num">5</span><span>  <span class="tok-prop">uiSystem</span>: <span class="tok-str">"UI UX Pro Max"</span>,</span></div>
+                    <div class="code-line"><span class="line-num">6</span><span>  <span class="tok-prop">available</span>: <span class="tok-bool">true</span></span></div>
+                    <div class="code-line"><span class="line-num">7</span><span>};</span></div>
+                    <div class="code-line"><span class="line-num">8</span><span><span class="tok-var">dev</span>.<span class="tok-prop">launch</span>();</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Copyright Footer -->
+        <footer class="footer-note">
+            <span>© Crafted with OPENWORLDXBD - 2026</span>
+        </footer>
+    </main>
+
+    <script id="mainScript">
+        /* ==========================================================================
+           1. PORTRAIT SVG FALLBACK (IN CASE LOCAL IMAGE 20175_2.png IS NOT IN SANDBOX)
+           ========================================================================== */
+        function renderPortraitFallback(imgEl) {
+            const parent = imgEl.parentElement;
+            if (!parent) return;
+            parent.innerHTML = `
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="Portrait Avatar">
+                    <defs>
+                        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#f8fafc"/>
+                            <stop offset="100%" stop-color="#e2e8f0"/>
+                        </linearGradient>
+                        <linearGradient id="tieGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#1e3a8a"/>
+                            <stop offset="100%" stop-color="#0f172a"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="120" height="120" fill="url(#bgGrad)"/>
+                    <path d="M16 120 C18 95, 36 88, 60 88 C84 88, 102 95, 104 120 Z" fill="#0f172a"/>
+                    <polygon points="46,88 60,116 74,88" fill="#ffffff"/>
+                    <polygon points="57,91 63,91 65,116 60,120 55,116" fill="url(#tieGrad)"/>
+                    <rect x="52" y="72" width="16" height="18" rx="6" fill="#eab896"/>
+                    <path d="M40 46 C40 28, 80 28, 80 46 C80 65, 71 78, 60 78 C49 78, 40 65, 40 46 Z" fill="#f3c6a5"/>
+                    <path d="M38 46 C37 25, 53 18, 68 21 C80 23, 84 34, 81 46 C77 35, 67 32, 54 34 C45 35, 41 40, 38 46 Z" fill="#1e1b18"/>
+                    <path d="M46 44 Q51 42 55 44" stroke="#292524" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <path d="M65 44 Q69 42 74 44" stroke="#292524" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <circle cx="51" cy="48" r="2.2" fill="#1c1917"/>
+                    <circle cx="69" cy="48" r="2.2" fill="#1c1917"/>
+                    <path d="M54 63 Q60 67 66 63" stroke="#9a5b4a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                </svg>
+            `;
         }
-      });
-      renderDropdown(tabKey);
-    }
 
-    function toggleTheme() {
-      const root = document.documentElement;
-      const isDark = root.classList.toggle('dark');
-      document.getElementById('themeIconSun').style.display = isDark ? 'block' : 'none';
-      document.getElementById('themeIconMoon').style.display = isDark ? 'none' : 'block';
-    }
+        /* ==========================================================================
+           2. INSTANT ZERO-FLICKER THEME TOGGLE
+           ========================================================================== */
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const htmlRoot = document.documentElement;
 
-    function switchView(target) {
-      currentView = target;
-      const homeEl = document.getElementById('homeView');
-      const contactEl = document.getElementById('contactView');
-      const chatIcon = document.getElementById('supportIconChat');
-      const backIcon = document.getElementById('supportIconBack');
+        function applyTheme(isLight) {
+            if (isLight) {
+                htmlRoot.classList.add('light-theme');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                htmlRoot.classList.remove('light-theme');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        }
 
-      if (target === 'contact') {
-        homeEl.classList.remove('active');
-        contactEl.classList.add('active', 'zoom-center-in');
-        chatIcon.style.display = 'none';
-        backIcon.style.display = 'block';
-      } else {
-        contactEl.classList.remove('active', 'zoom-center-in');
-        homeEl.classList.add('active');
-        chatIcon.style.display = 'block';
-        backIcon.style.display = 'none';
-      }
-    }
+        const savedTheme = localStorage.getItem('owxbd_theme');
+        applyTheme(savedTheme === 'light');
 
-    function toggleContactView() {
-      switchView(currentView === 'home' ? 'contact' : 'home');
-    }
+        themeToggleBtn.addEventListener('click', () => {
+            const willBeLight = !htmlRoot.classList.contains('light-theme');
+            applyTheme(willBeLight);
+            localStorage.setItem('owxbd_theme', willBeLight ? 'light' : 'dark');
+        });
 
-    function togglePlatformMenu() {
-      const menu = document.getElementById('platformMenu');
-      const trigger = document.getElementById('platformTrigger');
-      menu.classList.toggle('open');
-      trigger.classList.toggle('open');
-    }
+        /* ==========================================================================
+           3. AUTO-TYPING LOOP FOR "Assalamualaikum"
+           ========================================================================== */
+        (function initTypingLoop() {
+            const typingEl = document.getElementById('typingText');
+            const phrase = 'Assalamualaikum';
+            let idx = phrase.length;
+            let deleting = false;
 
-    function choosePlatform(name, el) {
-      selectedPlatform = name;
-      document.getElementById('selectedPlatformText').textContent = name;
-      document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
-      el.classList.add('selected');
-      togglePlatformMenu();
-    }
+            function step() {
+                if (!deleting) {
+                    idx++;
+                    typingEl.textContent = phrase.slice(0, idx);
+                    if (idx >= phrase.length) {
+                        deleting = true;
+                        setTimeout(step, 2200);
+                        return;
+                    }
+                    setTimeout(step, 95);
+                } else {
+                    idx--;
+                    typingEl.textContent = phrase.slice(0, Math.max(1, idx));
+                    if (idx <= 1) {
+                        deleting = false;
+                        setTimeout(step, 450);
+                        return;
+                    }
+                    setTimeout(step, 55);
+                }
+            }
+            setTimeout(() => { deleting = true; step(); }, 2200);
+        })();
 
-    function showToast(msg) {
-      const toast = document.getElementById('toastBanner');
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2400);
-    }
+        /* ==========================================================================
+           4. MESSENGER / WHATSAPP / TELEGRAM TAB SWITCHER
+           ========================================================================== */
+        const platformData = {
+            messenger: {
+                title: 'Facebook Messenger',
+                handle: '@openworldxbd',
+                desc: 'Direct message for custom web apps, UI/UX design inquiries, automation bots, and instant project support.',
+                ctaText: 'Chat on Messenger',
+                url: 'https://m.me/openworldxbd',
+                badgeBg: 'linear-gradient(135deg, #0084FF, #00C6FF)',
+                btnBg: 'linear-gradient(135deg, #0084FF, #2563EB)',
+                iconSvg: '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.04.57.61.94 1.13.71l1.98-.87c.17-.08.36-.1.55-.06.91.25 1.87.38 2.88.38 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.93 4.67c-.47.73-1.47.92-2.17.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.15 2.4c-.42.32-.97-.18-.69-.63l2.93-4.67c.47-.73 1.47-.92 2.17-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.15-2.4c.42-.32.97.18.69.63z"/></svg>'
+            },
+            whatsapp: {
+                title: 'WhatsApp Direct',
+                handle: '+880 • Official Business',
+                desc: 'Connect directly on WhatsApp for fast consultations, order updates, and dedicated client communication.',
+                ctaText: 'Message on WhatsApp',
+                url: 'https://wa.me/8801700000000',
+                badgeBg: 'linear-gradient(135deg, #25D366, #128C7E)',
+                btnBg: 'linear-gradient(135deg, #25D366, #059669)',
+                iconSvg: '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.96 1.38-.51.08-1.15.11-1.85-.11-.43-.14-.98-.32-1.68-.62-2.95-1.27-4.88-4.24-5.03-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.47.12.65-.07.18-.2.74-.86.94-1.16.2-.3.39-.25.66-.15.27.1 1.72.81 2.01.96.3.15.49.22.56.34.07.13.07.72-.17 1.4z"/></svg>'
+            },
+            telegram: {
+                title: 'Telegram Official',
+                handle: '@openworldxbd',
+                desc: 'Reach out on Telegram for APK releases, bot commands, private API access, and instant developer chat.',
+                ctaText: 'Open Telegram Chat',
+                url: 'https://t.me/openworldxbd',
+                badgeBg: 'linear-gradient(135deg, #26A5E4, #0284C7)',
+                btnBg: 'linear-gradient(135deg, #26A5E4, #0369A1)',
+                iconSvg: '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>'
+            }
+        };
 
-    function handleContactSubmit() {
-      const name = document.getElementById('senderName').value.trim();
-      const message = document.getElementById('senderMessage').value.trim();
-      if (!message) {
-        showToast('Please enter a message first');
-        return;
-      }
-      const text = encodeURIComponent(`Hi Openworldxbd${name ? ' (' + name + ')' : ''}, ${message}`);
-      let url = `https://wa.me/966500000000?text=${text}`;
-      if (selectedPlatform === 'Telegram') url = `https://t.me/openworldxbd`;
-      if (selectedPlatform === 'Messenger') url = `https://m.me/openworldxbd`;
-      if (selectedPlatform === 'Email') url = `mailto:contact@openworldxbd.com?subject=Inquiry&body=${text}`;
+        function switchPlatform(key, btnEl) {
+            const data = platformData[key];
+            if (!data) return;
 
-      showToast(`Opening ${selectedPlatform}...`);
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
+            document.querySelectorAll('.tab-box').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            btnEl.classList.add('active');
+            btnEl.setAttribute('aria-selected', 'true');
 
-    // Initialize Default WhatsApp Tab & Dropdown Open
-    selectSocialTab('whatsapp');
-  </script>
+            const panelCard = document.getElementById('platformPanelCard');
+            panelCard.style.animation = 'none';
+            void panelCard.offsetWidth;
+            panelCard.style.animation = 'motionBlurPanel 0.36s cubic-bezier(0.22, 1, 0.36, 1) both';
+
+            document.getElementById('panelBadge').style.background = data.badgeBg;
+            document.getElementById('panelBadge').innerHTML = data.iconSvg;
+            document.getElementById('panelTitle').textContent = data.title;
+            document.getElementById('panelHandle').textContent = data.handle;
+            document.getElementById('panelDesc').textContent = data.desc;
+            const ctaBtn = document.getElementById('panelCtaBtn');
+            ctaBtn.href = data.url;
+            ctaBtn.style.background = data.btnBg;
+            document.getElementById('panelCtaText').textContent = data.ctaText;
+        }
+
+        /* ==========================================================================
+           5. FALLING GLOWING STAR PARTICLES (TOP TO BOTTOM)
+           ========================================================================== */
+        window.addEventListener('load', () => {
+            const canvas = document.getElementById('starfieldCanvas');
+            const ctx = canvas.getContext('2d');
+            let width = 0;
+            let height = 0;
+            let stars = [];
+
+            function resizeCanvas() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            function createStars(count) {
+                const palette = [
+                    [59, 130, 246],  // Royal Blue
+                    [96, 165, 250],  // Sky Blue
+                    [251, 146, 60],  // Warm Amber Orange
+                    [249, 115, 22],  // Deep Orange
+                    [148, 163, 184]  // Soft Silver Star
+                ];
+                stars = [];
+                for (let i = 0; i < count; i++) {
+                    stars.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 1.8 + 0.7,
+                        speedY: Math.random() * 0.85 + 0.35,
+                        speedX: (Math.random() - 0.5) * 0.22,
+                        alpha: Math.random() * 0.7 + 0.3,
+                        rgb: palette[i % palette.length]
+                    });
+                }
+            }
+
+            function animateStars() {
+                ctx.clearRect(0, 0, width, height);
+                const isLight = document.documentElement.classList.contains('light-theme');
+
+                for (let i = 0; i < stars.length; i++) {
+                    const s = stars[i];
+                    s.y += s.speedY;
+                    s.x += s.speedX;
+
+                    if (s.y > height + 6) {
+                        s.y = -6;
+                        s.x = Math.random() * width;
+                    }
+                    if (s.x < 0) s.x = width;
+                    if (s.x > width) s.x = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    const opacity = isLight ? s.alpha * 0.65 : s.alpha;
+                    ctx.fillStyle = `rgba(${s.rgb[0]}, ${s.rgb[1]}, ${s.rgb[2]}, ${opacity})`;
+                    ctx.fill();
+                }
+                requestAnimationFrame(animateStars);
+            }
+
+            resizeCanvas();
+            createStars(48);
+            animateStars();
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                createStars(48);
+            });
+        });
+    </script>
 </body>
 </html>
